@@ -1,0 +1,7 @@
+correct code, 3 present, 1 absent, 1 damaged line   -> (3, 1) (expected (3, 1))
+typing error + except Exception: pass               -> (0, 1)   <- WRONG, no message at all
+typing error + except ValueError (specific)         -> stops at once: UnboundLocalError: cannot access local variable 'presnt' where it is not associated with a value
+
+Why hidden: 'presnt += 1' raises UnboundLocalError (a NameError subclass). UnboundLocalError is an Exception, so
+'except Exception: pass' catches it and throws it away on every P line; present stays 0 and nobody is told.
+issubclass(UnboundLocalError, Exception) = True | issubclass(UnboundLocalError, ValueError) = False

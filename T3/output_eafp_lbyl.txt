@@ -1,0 +1,8 @@
+Both styles are O(n) in the number of lines; what differs is the constant cost of a bad line.
+ bad lines |  EAFP (raise/catch) ns/line   LBYL (if) ns/line | EAFP/LBYL | same counts
+      0.0% |                         105                  89 |     1.19x | True
+      0.1% |                         103                  88 |     1.18x | True
+      1.0% |                         106                  89 |     1.19x | True
+     10.0% |                         119                  88 |     1.35x | True
+     50.0% |                         174                  85 |     2.04x | True
+    100.0% |                         221                  75 |     2.96x | True

@@ -1,0 +1,4 @@
+192300009,Student 09,MECH,student09@simats.edu.in,Mime
+192300010,Student 10,MECH,student10@simats.edu.in,Dance
+192300011,Student 11,MECH,student11@simats.edu.in,Singing
+192300012,Student 12,MECH,student12@simats.edu.in,Mime
