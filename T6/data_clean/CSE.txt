@@ -1,4 +1,0 @@
-192300001,Student 01,CSE,student01@simats.edu.in,Mime;Drama
-192300002,Student 02,CSE,student02@simats.edu.in,Mime;Singing
-192300003,Student 03,CSE,student03@simats.edu.in,Mime
-192300004,Student 04,CSE,student04@simats.edu.in,Mime;Singing

@@ -1,4 +1,0 @@
-192300013,Student 13,CIVIL,student13@simats.edu.in,Drama
-192300014,Student 14,CIVIL,student14@simats.edu.in,Drama;Singing
-192300015,Student 15,CIVIL,student15@simats.edu.in,Singing;Quiz;Mime
-192300016,Student 16,CIVIL,student16@simats.edu.in,Dance

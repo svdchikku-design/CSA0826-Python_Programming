@@ -1,2 +1,0 @@
-192300012,Lakshmi,CIVIL,lakshmi@simats.edu.in,Mime
-192300013,Mani,CIVIL,mani@simats.edu.in,Quiz

@@ -1,6 +1,0 @@
-192300001,Arun Kumar,CSE,arun.kumar@simats.edu.in,Dance;Quiz
-192300002,Bala S,CSE,bala@simats,Drama
-192300003,Charu Latha,CSE,charu@simats.edu.in,Singing
-192300004,Deepak R,CSE
-
-192300005,Elango,CSE,elango@simats.edu.in,mime ; quiz

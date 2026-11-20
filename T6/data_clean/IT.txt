@@ -1,4 +1,0 @@
-192300017,Student 17,IT,student17@simats.edu.in,Quiz;Drama
-192300018,Student 18,IT,student18@simats.edu.in,Dance;Quiz;Singing
-192300019,Student 19,IT,student19@simats.edu.in,Mime
-192300020,Student 20,IT,student20@simats.edu.in,Dance;Mime
