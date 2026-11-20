@@ -1,5 +1,0 @@
-2 file(s) read, 3 students, 2 damaged line(s)
-  192311001 present=2 absent=0  100.0%
-  192311002 present=1 absent=1  50.0%
-  192311003 present=0 absent=1  0.0%
-damaged: [('2026-10-08_room101.txt', 3, 'expected 3 fields, found 2'), ('2026-10-08_room101.txt', 4, "invalid status 'X'")]
