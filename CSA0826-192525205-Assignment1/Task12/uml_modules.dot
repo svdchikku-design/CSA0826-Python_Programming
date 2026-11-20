@@ -1,0 +1,6 @@
+digraph G { rankdir=LR; node [fontname="Helvetica", fontsize=10, shape=record, style=filled, fillcolor="#eef3fb"];
+calc [label="{calculator.py (retained)|BASE_RATE, STD_FAT, STD_SNF, STEP\lSNF_STEP_VALUE, FAT/SNF limits\l|+ is_number(text)\l+ to_decimal(value, name)\l+ money(x)\l+ parse_litres(value)\l+ rate_per_litre(fat, snf)\l+ payout(litres, fat, snf)\l+ ten_day_total(entries)\l}"];
+v2 [label="{milkrate_v2.py (modified + new)|RATE_CARDS: normal and season\lSEASON_MONTHS = (4, 5, 6)\lBONUS_THRESHOLD_LITRES, BONUS_PER_LITRE\l|+ season_of(day)\l+ parse_reading(value, name, low, high)\l+ rate_per_litre(fat, snf, day)\l+ payout(litres, fat, snf, day)\l+ bonus(total_litres)\l+ ten_day_settlement(entries)\l}", fillcolor="#fff2cc"];
+t [label="{test_v2.py|27 assert cases}", fillcolor="#d9ead3"];
+c [label="{clerk program / reports|reads entries, prints slips}", fillcolor="#d9ead3"];
+v2 -> calc [label="imports"]; t -> v2 [label="tests"]; c -> v2 [label="calls"]; }

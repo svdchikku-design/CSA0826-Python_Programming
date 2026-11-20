@@ -1,0 +1,6 @@
+       n  functions (ms)  inline (ms)  lambda (ms)  same total?  call overhead per entry (us)
+     300            0.34         0.27         0.29         True       0.239
+    6000            6.00         5.66         5.88         True       0.057
+  150000           92.98        85.51        93.87         True       0.050
+
+repeated copies of the rate expression: functions = 1, one long script = 1 per place it is needed (slip, report, bank file ...)

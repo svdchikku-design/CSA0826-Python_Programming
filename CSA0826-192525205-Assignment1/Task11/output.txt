@@ -1,0 +1,15 @@
+FINAL DESIGN (calculator.py: Decimal, validated, per-payment rounding, running total)
+       n         total (Rs)   time (s)   peak memory (KB)
+     300          321119.58       0.01                4.1
+    6000         6154279.71       0.18                4.1
+  150000       155996113.77       4.34                4.1
+
+JSON card rate for 4.2/8.7: 33.40 (module gives 33.40 )
+after editing ratecard_revised.json (fat step 0.45): rate = 33.75 amount = 286.88
+
+ t values  file size (bytes)  load time (ms)  memory (KB)
+        6                101           1.088          7.0
+     1000              18783           4.833        258.6
+   100000            2078897         346.419      28883.7
+
+malformed JSON -> JSONDecodeError: Illegal trailing comma before end of object: line 1 column 46 (char 45)

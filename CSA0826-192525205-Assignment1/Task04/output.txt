@@ -1,0 +1,37 @@
+=== Surprising results ===
+(4.2 - 3.5) / 0.1                          -> 7.000000000000002
+round((4.2 - 3.5) / 0.1)                   -> 7
+(3.5 - 3.1) / 0.1                          -> 3.999999999999999
+int((3.5 - 3.1) / 0.1)                     -> 3
+-2 ** 2                                    -> -4
+(-2) ** 2                                  -> 4
+2 ** 3 ** 2                                -> 512
+2 ** -1                                    -> 0.5
+round(2.5), round(3.5), round(0.5)         -> (2, 4, 0)
+10 - 4 - 3  (left to right)                -> 3
+100 / 10 / 5                               -> 2.0
+
+=== round() vs int() vs math.floor() on negative values ===
+value  -3.5: round= -4  int= -3  floor= -4
+value  -3.9: round= -4  int= -3  floor= -4
+value  -0.4: round=  0  int=  0  floor= -1
+value   3.9: round=  4  int=  3  floor=  3
+
+=== Comparison chaining and Boolean operators ===
+fat=1.9: 2.0 <= fat <= 7.0 -> False; same as 'and' form -> False; invalid = True
+fat=2.0: 2.0 <= fat <= 7.0 -> True; same as 'and' form -> True; invalid = False
+fat=4.2: 2.0 <= fat <= 7.0 -> True; same as 'and' form -> True; invalid = False
+fat=7.0: 2.0 <= fat <= 7.0 -> True; same as 'and' form -> True; invalid = False
+fat=7.1: 2.0 <= fat <= 7.0 -> False; same as 'and' form -> False; invalid = True
+1 < 2 < 3 and 3 > 2 > 5                    -> False
+True or 1/0   (short-circuit)              -> True
+
+=== The four expressions of the calculator ===
+fat_steps=7  snf_steps=2  rate=33.4  amount=283.9
+
+=== Alternative: int() or math.floor() instead of round() (snf fixed at 8.5) ===
+  fat            raw steps |  round    int  floor | rate(round) rate(int) rate(floor)
+  4.2   7.0000000000000018 |      7      7      7 |        32.8     32.8       32.8
+  3.1  -3.9999999999999991 |     -4     -3     -4 |        28.4     28.8       28.4
+  3.8   2.9999999999999982 |      3      2      2 |        31.2     30.8       30.8
+correct rate for fat 3.1 = 30.00 - 4 * 0.40 = 28.40 ; for fat 4.2 = 30.00 + 7 * 0.40 = 32.80 ; for fat 3.8 = 30.00 + 3 * 0.40 = 31.20

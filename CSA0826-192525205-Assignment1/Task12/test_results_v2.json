@@ -1,0 +1,164 @@
+[
+ {
+  "case": "season_of 2026-03-31",
+  "expected": "normal",
+  "actual": "normal",
+  "ok": true
+ },
+ {
+  "case": "season_of 2026-04-01",
+  "expected": "season",
+  "actual": "season",
+  "ok": true
+ },
+ {
+  "case": "season_of 2026-06-30",
+  "expected": "season",
+  "actual": "season",
+  "ok": true
+ },
+ {
+  "case": "season_of 2026-07-01",
+  "expected": "normal",
+  "actual": "normal",
+  "ok": true
+ },
+ {
+  "case": "normal: 10 L, 3.5/8.5",
+  "expected": "300.00",
+  "actual": "300.00",
+  "ok": true
+ },
+ {
+  "case": "normal: 8.5 L, 4.2/8.7  (original test)",
+  "expected": "283.90",
+  "actual": "283.90",
+  "ok": true
+ },
+ {
+  "case": "normal: 12 L, 3.1/8.3   (original test)",
+  "expected": "333.60",
+  "actual": "333.60",
+  "ok": true
+ },
+ {
+  "case": "season: 10 L, 3.5/8.5",
+  "expected": "320.00",
+  "actual": "320.00",
+  "ok": true
+ },
+ {
+  "case": "season: rate 4.2/8.7",
+  "expected": "35.75",
+  "actual": "35.75",
+  "ok": true
+ },
+ {
+  "case": "season: 8.5 L, 4.2/8.7 (half-paise)",
+  "expected": "303.88",
+  "actual": "303.88",
+  "ok": true
+ },
+ {
+  "case": "season: rate fat 2.00 / snf 8.50",
+  "expected": "25.25",
+  "actual": "25.25",
+  "ok": true
+ },
+ {
+  "case": "normal: rate 3.57/8.53",
+  "expected": "30.37",
+  "actual": "30.37",
+  "ok": true
+ },
+ {
+  "case": "normal: 10 L, 3.57/8.53",
+  "expected": "303.70",
+  "actual": "303.70",
+  "ok": true
+ },
+ {
+  "case": "season: rate 3.57/8.53 (32.405 -> up)",
+  "expected": "32.41",
+  "actual": "32.41",
+  "ok": true
+ },
+ {
+  "case": "season: 10 L, 3.57/8.53",
+  "expected": "324.10",
+  "actual": "324.10",
+  "ok": true
+ },
+ {
+  "case": "season: rate 3.46/8.44",
+  "expected": "31.64",
+  "actual": "31.64",
+  "ok": true
+ },
+ {
+  "case": "bonus 500 L (not more than 500)",
+  "expected": "0.00",
+  "actual": "0.00",
+  "ok": true
+ },
+ {
+  "case": "bonus 500.01 L",
+  "expected": "250.01",
+  "actual": "250.01",
+  "ok": true
+ },
+ {
+  "case": "bonus 520 L",
+  "expected": "260.00",
+  "actual": "260.00",
+  "ok": true
+ },
+ {
+  "case": "bonus 120 L",
+  "expected": "0.00",
+  "actual": "0.00",
+  "ok": true
+ },
+ {
+  "case": "settlement May: litres",
+  "expected": "520",
+  "actual": "520",
+  "ok": true
+ },
+ {
+  "case": "settlement May: payments (20 x 832.00)",
+  "expected": "16640.00",
+  "actual": "16640.00",
+  "ok": true
+ },
+ {
+  "case": "settlement May: bonus",
+  "expected": "260.00",
+  "actual": "260.00",
+  "ok": true
+ },
+ {
+  "case": "settlement May: total",
+  "expected": "16900.00",
+  "actual": "16900.00",
+  "ok": true
+ },
+ {
+  "case": "settlement Nov: total (20 x 780.00 + 260.00)",
+  "expected": "15860.00",
+  "actual": "15860.00",
+  "ok": true
+ },
+ {
+  "case": "settlement May 400 L: total (no bonus)",
+  "expected": "12800.00",
+  "actual": "12800.00",
+  "ok": true
+ },
+ {
+  "case": "fat 3.555 (3 decimals)",
+  "expected": "rejected",
+  "actual": "rejected",
+  "ok": true
+ }
+]

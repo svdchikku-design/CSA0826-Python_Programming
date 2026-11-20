@@ -1,0 +1,170 @@
+[
+ {
+  "group": "Normal",
+  "label": "standard milk",
+  "inp": "10 L, fat 3.5, snf 8.5",
+  "expected": "rate 30.00, amount 300.00",
+  "actual": "rate 30.00, amount 300.00",
+  "ok": true
+ },
+ {
+  "group": "Normal",
+  "label": "fat above, SNF above",
+  "inp": "8.5 L, fat 4.2, snf 8.7",
+  "expected": "rate 33.40, amount 283.90",
+  "actual": "rate 33.40, amount 283.90",
+  "ok": true
+ },
+ {
+  "group": "Normal",
+  "label": "fat below, SNF below",
+  "inp": "12 L, fat 3.1, snf 8.3",
+  "expected": "rate 27.80, amount 333.60",
+  "actual": "rate 27.80, amount 333.60",
+  "ok": true
+ },
+ {
+  "group": "Normal",
+  "label": "fat above, SNF below",
+  "inp": "10 L, fat 4.0, snf 8.2",
+  "expected": "rate 31.10, amount 311.00",
+  "actual": "rate 31.10, amount 311.00",
+  "ok": true
+ },
+ {
+  "group": "Normal",
+  "label": "fat below, SNF above",
+  "inp": "10 L, fat 3.0, snf 8.9",
+  "expected": "rate 29.20, amount 292.00",
+  "actual": "rate 29.20, amount 292.00",
+  "ok": true
+ },
+ {
+  "group": "Boundary",
+  "label": "exactly 3.5 fat / 8.5 SNF",
+  "inp": "1 L, fat 3.5, snf 8.5",
+  "expected": "rate 30.00, amount 30.00",
+  "actual": "rate 30.00, amount 30.00",
+  "ok": true
+ },
+ {
+  "group": "Boundary",
+  "label": "lowest fat 2.0",
+  "inp": "10 L, fat 2.0, snf 8.5",
+  "expected": "rate 24.00, amount 240.00",
+  "actual": "rate 24.00, amount 240.00",
+  "ok": true
+ },
+ {
+  "group": "Boundary",
+  "label": "highest fat 7.0",
+  "inp": "10 L, fat 7.0, snf 8.5",
+  "expected": "rate 44.00, amount 440.00",
+  "actual": "rate 44.00, amount 440.00",
+  "ok": true
+ },
+ {
+  "group": "Boundary",
+  "label": "largest litres 200",
+  "inp": "200 L, fat 3.5, snf 8.5",
+  "expected": "rate 30.00, amount 6000.00",
+  "actual": "rate 30.00, amount 6000.00",
+  "ok": true
+ },
+ {
+  "group": "Boundary",
+  "label": "smallest litres 0.01",
+  "inp": "0.01 L, fat 3.5, snf 8.5",
+  "expected": "rate 30.00, amount 0.30",
+  "actual": "rate 30.00, amount 0.30",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "text litres",
+  "inp": "'eight' L, fat '3.5', snf '8.5'",
+  "expected": "rejected (not a valid number)",
+  "actual": "rejected: litres: 'eight' is not a valid number (digits and one '.' only)",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "comma decimal",
+  "inp": "'8,5' L, fat '3.5', snf '8.5'",
+  "expected": "rejected (not a valid number)",
+  "actual": "rejected: litres: '8,5' is not a valid number (digits and one '.' only)",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "negative litres",
+  "inp": "'-5' L, fat '3.5', snf '8.5'",
+  "expected": "rejected (greater than 0)",
+  "actual": "rejected: litres: -5 must be greater than 0",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "zero litres",
+  "inp": "'0' L, fat '3.5', snf '8.5'",
+  "expected": "rejected (greater than 0)",
+  "actual": "rejected: litres: 0 must be greater than 0",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "litres above limit",
+  "inp": "'201' L, fat '3.5', snf '8.5'",
+  "expected": "rejected (above the limit)",
+  "actual": "rejected: litres: 201 is above the limit of 200",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "fat below 2.0",
+  "inp": "'10' L, fat '1.9', snf '8.5'",
+  "expected": "rejected (outside the allowed range)",
+  "actual": "rejected: fat: 1.9 is outside the allowed range 2.0 to 7.0",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "fat above 7.0",
+  "inp": "'10' L, fat '7.1', snf '8.5'",
+  "expected": "rejected (outside the allowed range)",
+  "actual": "rejected: fat: 7.1 is outside the allowed range 2.0 to 7.0",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "snf outside range",
+  "inp": "'10' L, fat '3.5', snf '10.1'",
+  "expected": "rejected (outside the allowed range)",
+  "actual": "rejected: snf: 10.1 is outside the allowed range 6.0 to 10.0",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "empty text",
+  "inp": "'' L, fat '3.5', snf '8.5'",
+  "expected": "rejected (not a valid number)",
+  "actual": "rejected: litres: '' is not a valid number (digits and one '.' only)",
+  "ok": true
+ },
+ {
+  "group": "Invalid",
+  "label": "two decimals of fat",
+  "inp": "'10' L, fat '3.55', snf '8.5'",
+  "expected": "rejected (at most 1 decimal)",
+  "actual": "rejected: fat: at most 1 decimal place",
+  "ok": true
+ },
+ {
+  "group": "Hand total",
+  "label": "5 entries",
+  "inp": "10 L 3.5/8.5; 8.5 L 4.2/8.7; 12 L 3.1/8.3; 10 L 4.0/8.2; 7.5 L 3.8/8.6",
+  "expected": "300.00 + 283.90 + 333.60 + 311.00 + 236.25 = 1464.75",
+  "actual": "300.00 + 283.90 + 333.60 + 311.00 + 236.25 = 1464.75",
+  "ok": true
+ }
+]

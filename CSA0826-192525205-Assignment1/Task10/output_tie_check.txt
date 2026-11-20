@@ -1,0 +1,4 @@
+6000 entries: 600 exact half-paisa ties
+float round() agrees with half-up  : 298
+float round() agrees with half-even: 339
+float rounded the tie UP 298 times and DOWN 302 times (direction depends on binary representation)

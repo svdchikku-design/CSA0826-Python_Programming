@@ -1,0 +1,18 @@
+input     str-method check    try/except float()    
+'8.5'     accept              accept -> 8.5         
+' 8.5 '   accept              accept -> 8.5         
+'8,5'     reject              reject                
+'eight'   reject              reject                
+'-4'      accept              accept -> -4.0        
+''        reject              reject                
+'1e3'     reject              accept -> 1000.0      
+'nan'     reject              accept -> nan         
+'inf'     reject              accept -> inf         
+'8_5'     reject              accept -> 85.0        
+'٣.٥'     accept              accept -> 3.5         
+
+microseconds per entry (300000 repeats)
+input        str check + float    try/except
+'8.5'                    0.248         0.067
+'8,5'                    0.112         0.307
+'eight'                  0.138         0.529

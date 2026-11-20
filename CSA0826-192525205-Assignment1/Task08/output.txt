@@ -1,0 +1,11 @@
+HAND TRACE of TEN_DAY_TOTAL for three entries
+ i  litres   fat   snf  fat_steps  snf_steps    rate    amount  total after
+ 1      10   3.5   8.5          0          0   30.00    300.00       300.00
+ 2     8.5   4.2   8.7          7          2   33.40    283.90       583.90
+ 3      12   3.1   8.3         -4         -2   27.80    333.60       917.50
+ten-day total = 917.50
+
+       n  time list (ms)  time running (ms)  peak memory list (KB)  peak memory running (KB)  equal?
+     300            6.49               5.78                  126.5                       0.9  True
+    6000          104.24              73.69                 2518.0                       0.9  True
+  150000         2132.66            1818.82                63238.2                       0.9  True

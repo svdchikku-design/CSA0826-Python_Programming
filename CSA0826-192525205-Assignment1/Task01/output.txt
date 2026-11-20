@@ -1,0 +1,19 @@
+=== Values, types and the reason for each ===
+farmer_id     'F001'   str    text: an identifier, no arithmetic
+litres        10.5     float  fractional: measured quantity
+fat           3.5      float  fractional: percentage
+snf           8.5      float  fractional: percentage
+shift         'M'      str    text: M = morning, E = evening
+PAYMENT_DAYS  10       int    whole number: count of days
+BASE_RATE     30.0     float  fractional: money (see Task 2 - will become Decimal)
+
+=== One entry kept as ONE tuple, many entries in ONE list ===
+('F001', 10.0, 3.5, 8.5, 'M')
+('F002', 8.5, 4.2, 8.7, 'M')
+('F003', 12.0, 3.1, 8.3, 'E')
+
+=== Variable-per-value design vs list design ===
+     n   source lines (variables)  source lines (list)  t variables (ms)  t list (ms)
+   300                       1201                    7             0.127        0.074
+  3000                      12001                    7             1.367        1.077
+variables created for n=3000 : 9000

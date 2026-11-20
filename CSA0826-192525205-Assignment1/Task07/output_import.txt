@@ -1,0 +1,4 @@
+import milkrate            -> 300.0
+import milkrate as mr      -> 33.4
+from milkrate import payout -> 283.9
+__name__ inside milkrate   = milkrate | __name__ here = __main__

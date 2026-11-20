@@ -1,0 +1,31 @@
+input() always returns str: str -> float('8.5') = 8.5 | int('8') = 8
+float('8,5') -> ValueError: could not convert string to float: '8,5'
+float('eight') -> ValueError: could not convert string to float: 'eight'
+
+Farmer ID (DONE to stop): F001
+  Litres : 10
+  Fat %  : 3.5
+  SNF %  : 8.5
+Farmer ID (DONE to stop): F002
+  Litres : 8,5
+   '8,5' is not a number - use digits and a dot, e.g. 8.5
+  Litres : eight
+   'eight' is not a number - use digits and a dot, e.g. 8.5
+  Litres :  8.5 
+  Fat %  : 4.2
+  SNF %  : 8.7
+Farmer ID (DONE to stop): F003
+  Litres : -4
+   -4.0 is outside 0.01 to 200.0
+  Litres : 12
+  Fat %  : 7.5
+   7.5 is outside 2.0 to 7.0
+  Fat %  : 3.1
+  SNF %  : 8.3
+Farmer ID (DONE to stop): DONE
+
+ID      Litres   Fat   SNF    Rate    Amount
+F001     10.00   3.5   8.5   30.00    300.00
+F002      8.50   4.2   8.7   33.40    283.90
+F003     12.00   3.1   8.3   27.80    333.60
+TOTAL                                 917.50

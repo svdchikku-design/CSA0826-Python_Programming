@@ -1,0 +1,30 @@
+Case                                              Expected      Actual  Result
+season_of 2026-03-31                                normal      normal  PASS
+season_of 2026-04-01                                season      season  PASS
+season_of 2026-06-30                                season      season  PASS
+season_of 2026-07-01                                normal      normal  PASS
+normal: 10 L, 3.5/8.5                               300.00      300.00  PASS
+normal: 8.5 L, 4.2/8.7  (original test)             283.90      283.90  PASS
+normal: 12 L, 3.1/8.3   (original test)             333.60      333.60  PASS
+season: 10 L, 3.5/8.5                               320.00      320.00  PASS
+season: rate 4.2/8.7                                 35.75       35.75  PASS
+season: 8.5 L, 4.2/8.7 (half-paise)                 303.88      303.88  PASS
+season: rate fat 2.00 / snf 8.50                     25.25       25.25  PASS
+normal: rate 3.57/8.53                               30.37       30.37  PASS
+normal: 10 L, 3.57/8.53                             303.70      303.70  PASS
+season: rate 3.57/8.53 (32.405 -> up)                32.41       32.41  PASS
+season: 10 L, 3.57/8.53                             324.10      324.10  PASS
+season: rate 3.46/8.44                               31.64       31.64  PASS
+bonus 500 L (not more than 500)                       0.00        0.00  PASS
+bonus 500.01 L                                      250.01      250.01  PASS
+bonus 520 L                                         260.00      260.00  PASS
+bonus 120 L                                           0.00        0.00  PASS
+settlement May: litres                                 520         520  PASS
+settlement May: payments (20 x 832.00)            16640.00    16640.00  PASS
+settlement May: bonus                               260.00      260.00  PASS
+settlement May: total                             16900.00    16900.00  PASS
+settlement Nov: total (20 x 780.00 + 260.00)      15860.00    15860.00  PASS
+settlement May 400 L: total (no bonus)            12800.00    12800.00  PASS
+fat 3.555 (3 decimals)                            rejected    rejected  PASS
+
+27 cases, all passed: True

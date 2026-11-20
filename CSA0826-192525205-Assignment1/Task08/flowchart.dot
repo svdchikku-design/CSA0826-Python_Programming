@@ -1,0 +1,13 @@
+digraph G { rankdir=TB; node [fontname="Helvetica", fontsize=10]; edge [fontname="Helvetica", fontsize=9];
+s [label="START", shape=oval, style=filled, fillcolor="#d9ead3"];
+r [label="Read farmer ID, shift,\nlitres, fat, snf (text)", shape=parallelogram];
+d1 [label="shift is M or E?", shape=diamond];
+d2 [label="litres, fat, snf are\nvalid numbers?", shape=diamond];
+d3 [label="0 < litres <= 200?", shape=diamond];
+d4 [label="2.0 <= fat <= 7.0 and\n6.0 <= snf <= 10.0?", shape=diamond];
+d5 [label="at most 1 decimal\nin fat and snf?", shape=diamond];
+ok [label="ACCEPT entry\n(convert to Decimal)", shape=box, style=filled, fillcolor="#d9ead3"];
+bad [label="REJECT: show message,\nask the clerk again", shape=box, style=filled, fillcolor="#f4cccc"];
+e [label="END", shape=oval, style=filled, fillcolor="#d9ead3"];
+s->r->d1; d1->d2 [label="yes"]; d2->d3 [label="yes"]; d3->d4 [label="yes"]; d4->d5 [label="yes"]; d5->ok [label="yes"]; ok->e;
+d1->bad [label="no"]; d2->bad [label="no"]; d3->bad [label="no"]; d4->bad [label="no"]; d5->bad [label="no"]; bad->r [label="retry", constraint=false]; }

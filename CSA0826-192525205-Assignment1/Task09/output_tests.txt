@@ -1,0 +1,24 @@
+Group     Case                        Expected                                  Result
+Normal    standard milk               rate 30.00, amount 300.00                 PASS
+Normal    fat above, SNF above        rate 33.40, amount 283.90                 PASS
+Normal    fat below, SNF below        rate 27.80, amount 333.60                 PASS
+Normal    fat above, SNF below        rate 31.10, amount 311.00                 PASS
+Normal    fat below, SNF above        rate 29.20, amount 292.00                 PASS
+Boundary  exactly 3.5 fat / 8.5 SNF   rate 30.00, amount 30.00                  PASS
+Boundary  lowest fat 2.0              rate 24.00, amount 240.00                 PASS
+Boundary  highest fat 7.0             rate 44.00, amount 440.00                 PASS
+Boundary  largest litres 200          rate 30.00, amount 6000.00                PASS
+Boundary  smallest litres 0.01        rate 30.00, amount 0.30                   PASS
+Invalid   text litres                 rejected (not a valid number)             PASS
+Invalid   comma decimal               rejected (not a valid number)             PASS
+Invalid   negative litres             rejected (greater than 0)                 PASS
+Invalid   zero litres                 rejected (greater than 0)                 PASS
+Invalid   litres above limit          rejected (above the limit)                PASS
+Invalid   fat below 2.0               rejected (outside the allowed range)      PASS
+Invalid   fat above 7.0               rejected (outside the allowed range)      PASS
+Invalid   snf outside range           rejected (outside the allowed range)      PASS
+Invalid   empty text                  rejected (not a valid number)             PASS
+Invalid   two decimals of fat         rejected (at most 1 decimal)              PASS
+Hand total5 entries                   300.00 + 283.90 + 333.60 + 311.00 + 236.  PASS
+
+21 cases, all passed: True   (whole suite ran in 0.24 ms)

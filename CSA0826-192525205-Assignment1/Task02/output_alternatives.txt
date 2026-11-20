@@ -1,0 +1,12 @@
+memory per value (sys.getsizeof):
+  float   33.40       : 24 bytes
+  int     3340 paise  : 28 bytes
+  Decimal('33.40')    : 120 bytes
+
+       n    exact (paise)  int paise    Decimal  float raw  float,rnd end  float+round | time per addition (microseconds)
+     300         29571.39       True       True      False           True         True | paise 0.183  Decimal 0.176  float 0.060  float+round 0.368
+         raw float total = 29571.38999999999   exact = 29571.39   float error = -1.091e-11
+    6000        594115.39       True       True      False           True         True | paise 0.174  Decimal 0.154  float 0.054  float+round 0.257
+         raw float total = 594115.3899999992   exact = 594115.39   float error = -8.149e-10
+  150000      15014688.74       True       True      False           True         True | paise 0.354  Decimal 0.314  float 0.097  float+round 0.451
+         raw float total = 15014688.739999859   exact = 15014688.74   float error = -1.416e-07

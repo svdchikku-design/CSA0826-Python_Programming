@@ -1,0 +1,60 @@
+>>> type(10)
+<class 'int'>
+>>> type(10.0)
+<class 'float'>
+>>> type("10")
+<class 'str'>
+>>> type(True)
+<class 'bool'>
+>>> type([10, 8.5])
+<class 'list'>
+>>> 7 / 2
+3.5
+>>> 7 // 2
+3
+>>> 7 % 2
+1
+>>> -7 // 2
+-4
+>>> -7 % 2
+1
+>>> 0.1 + 0.2
+0.30000000000000004
+>>> 0.1 + 0.2 == 0.3
+False
+>>> abs((0.1 + 0.2) - 0.3) < 1e-9
+True
+>>> True + True
+2
+>>> isinstance(True, int)
+True
+>>> "10" + 10
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+TypeError: can only concatenate str (not "int") to str
+>>> "10" * 2
+'1010'
+>>> int("10") + 10
+20
+>>> sum([0.1] * 10)
+1.0
+>>> total = 0.0
+>>> for _ in range(10): total += 0.1
+... 
+>>> total
+0.9999999999999999
+>>> total == 1.0
+False
+>>> round(2.675, 2)
+2.67
+>>> round(0.125, 2)
+0.12
+>>> from decimal import Decimal
+>>> Decimal("0.1") + Decimal("0.2")
+Decimal('0.3')
+>>> Decimal(0.1)
+Decimal('0.1000000000000000055511151231257827021181583404541015625')
+>>> Decimal("33.40") * 3
+Decimal('100.20')
+>>> 1000 * 33.40
+33400.0

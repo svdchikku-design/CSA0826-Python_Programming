@@ -1,0 +1,5 @@
+Decimal(amount)        : 33400.30
+Decimal(float(amount)) : 33400.29999999999857893118278
+Decimal(float('33.40')): 33.39999999999999857891452847979962825775146484375
+difference             : -1.42106881722E-12
+rounded to paise       : 33400.30

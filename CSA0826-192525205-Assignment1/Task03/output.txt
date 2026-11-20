@@ -1,0 +1,27 @@
+rate for fat 4.2, snf 8.7 : 33.4
+
+--- Python has no true constants: the name can be re-bound ---
+after BASE_RATE = 99.0 -> rate : 102.4 (nothing stopped us; UPPER_CASE is only a convention)
+
+--- Dynamic typing: one name, different types ---
+8 int
+eight str
+8.5 float
+
+--- Multiple assignment and swapping ---
+litres, fat, snf = 10.0 3.5 8.5
+after a, b = b, a -> 8.5 3.5
+chained x = y = 0 -> 0 0
+
+--- Magic numbers: how many places hold the fat step 0.40? ---
+copies of the literal 0.40 in two magic-number functions : 2
+occurrences of FAT_STEP_VALUE assignment (constants)  : 1
+slip (revised)  : 33.75
+report (missed) : 33.4  <- the two documents now disagree
+
+dictionary after revision to 0.45 : 33.75
+
+microseconds per call (200000 calls)
+  magic numbers    : 0.311
+  named constants  : 0.344
+  dictionary       : 0.363

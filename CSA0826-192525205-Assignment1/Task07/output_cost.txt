@@ -1,0 +1,7 @@
+sys.path[0:3] = ['/home/claude/csa08/Task07', '/usr/local/lib/python313.zip', '/usr/local/lib/python3.13']
+milkrate loaded yet? False
+first import  :     194.6 microseconds (find file, compile, run)
+repeat import :     0.171 microseconds each (dictionary lookup in sys.modules)
+milkrate loaded now? True | file = milkrate.py
+ModuleNotFoundError: No module named 'milkrate_missing'
+copied function gives 33.4 - identical today, but a revision must now be made in every script

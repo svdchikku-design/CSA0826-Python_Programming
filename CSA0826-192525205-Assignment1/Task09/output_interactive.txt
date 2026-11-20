@@ -1,0 +1,43 @@
+KSHEERA MILK CO-OPERATIVE - payment slip (type DONE as farmer ID to finish)
+Farmer ID : F001
+Shift (M/E): M
+Litres     : 10
+Fat %      : 3.5
+SNF %      : 8.5
+Farmer ID : F002
+Shift (M/E): x
+   Error: shift: 'x' must be M or E
+Shift (M/E): M
+Litres     : 8,5
+   Error: litres: '8,5' is not a valid number (digits and one '.' only)
+Litres     : eight
+   Error: litres: 'eight' is not a valid number (digits and one '.' only)
+Litres     : 8.5
+Fat %      :  4.2 
+SNF %      : 4.2
+   Error: snf: 4.2 is outside the allowed range 6.0 to 10.0
+SNF %      : 8.7
+Farmer ID : F003
+Shift (M/E): E
+Litres     : -5
+   Error: litres: -5 must be greater than 0
+Litres     : 12
+Fat %      : 7.5
+   Error: fat: 7.5 is outside the allowed range 2.0 to 7.0
+Fat %      : 3.1
+SNF %      : 12.0
+   Error: snf: 12.0 is outside the allowed range 6.0 to 10.0
+SNF %      : 8.3
+Farmer ID : F004
+Shift (M/E): E
+Litres     : 12
+Fat %      : 3.1
+SNF %      : 8.3
+Farmer ID : DONE
+
+ID     Shift   Litres   Fat   SNF    Rate    Amount
+F001       M    10.00   3.5   8.5   30.00    300.00
+F002       M     8.50   4.2   8.7   33.40    283.90
+F003       E    12.00   3.1   8.3   27.80    333.60
+F004       E    12.00   3.1   8.3   27.80    333.60
+TOTAL                                        1251.10

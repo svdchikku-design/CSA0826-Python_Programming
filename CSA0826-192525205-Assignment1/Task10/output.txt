@@ -1,0 +1,18 @@
+       n |   bank total (exact)            float total  float - exact | payments differing by 1 paisa | float(unrounded)->round once | exact(unrounded)->round once
+     300 |            321119.58              321119.37     -2.100e-01 |           21 |            321119.34   |            321119.34
+    6000 |           6154279.71      6154276.689999994     -3.020e+00 |          302 |            6154276.5   |           6154276.50
+  150000 |         155996113.77     155996038.83999988     -7.493e+01 |         7493 |         155996040.13   |         155996040.13
+
+Rounding policy (one 5-entry example, litres with 2 decimals):
+  unrounded payments : ['370.5000', '217.3600', '306.3350', '133.5000', '633.5800']
+  rounded payments   : ['370.50', '217.36', '306.34', '133.50', '633.58']
+  sum of rounded (what the bank pays) = 1661.28 | round(sum of unrounded) = 1661.28
+
+       n  float core (ms)  Decimal core (ms)  Decimal incl. validation (ms)
+     300              0.2                0.6                            1.3
+    6000              3.5                9.3                           22.4
+  150000             88.4              245.3                          545.9
+
+Rate table: k = 231 (fat, snf) pairs, build 0.72 ms, dict size 9304 bytes (+ keys/values)
+150000 entries: recalculate 293.2 ms | table lookup 190.2 ms | same total: True
+per entry: recalculate 1.955 us | lookup 1.268 us

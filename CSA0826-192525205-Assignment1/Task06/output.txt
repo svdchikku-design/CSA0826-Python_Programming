@@ -1,0 +1,18 @@
+rate_per_litre(4.2, 8.7) = 33.4
+payout(8.5, 4.2, 8.7)    = 283.9
+ten_day_total(entries)   = 917.5
+
+--- returning versus printing ---
+  printed: 10 L at 30.0 = 300.0
+value returned by show_payout : None (None - cannot be added or stored)
+value returned by payout      : 300.0 -> y + 1 = 301.0
+
+--- local and global names ---
+local_copy() returned 99.0 | global BASE_RATE is still 30.0
+UnboundLocalError: cannot access local variable 'BASE_RATE' where it is not associated with a value
+reading a global inside a function is fine: 30.0 (uses BASE_RATE = 30.0)
+
+--- docstrings ---
+rate_per_litre: Return the price per litre (float, 2 decimals) for the given fat % and SNF %.
+payout: Return the amount payable for one entry, rounded to 2 decimals.
+ten_day_total: Return the total of payout() over a list of (litres, fat, snf) tuples.
