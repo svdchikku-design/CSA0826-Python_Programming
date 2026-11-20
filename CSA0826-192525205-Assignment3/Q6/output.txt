@@ -1,0 +1,46 @@
+12007  Shatabdi Express     runs: Mon,Tue,Thu,Fri,Sat,Sun
+        Station                   Arr    Dep
+        Chennai Central             -  06:00
+        Katpadi                 07:43  07:45
+        Bengaluru               11:30      -
+12163  Dadar Express        runs: Mon,Tue,Fri,Sat
+        Station                   Arr    Dep
+        Chennai Egmore              -  20:10
+        Katpadi                 22:03  22:05
+        Pune                    13:00  13:10
+        Dadar                   17:20      -
+12433  Chennai Rajdhani     runs: Mon,Wed,Fri
+        Station                   Arr    Dep
+        Chennai Central             -  06:10
+        Gudur                   07:45  07:47
+        Vijayawada              10:40  10:45
+        Nizamuddin              05:50      -
+12609  Mysuru Express       runs: Mon,Tue,Wed,Thu,Fri,Sat,Sun
+        Station                   Arr    Dep
+        Chennai Central             -  13:30
+        Katpadi                 15:13  15:15
+        Bengaluru               18:50  18:55
+        Mysuru                  21:20      -
+12621  Tamil Nadu Express   runs: Mon,Tue,Wed,Thu,Fri,Sat,Sun
+        Station                   Arr    Dep
+        Chennai Central             -  22:00
+        Gudur                   23:18  23:20
+        Vijayawada              02:45  02:50
+        Nagpur                  12:00  12:10
+        New Delhi               07:05      -
+12695  Trivandrum Express   runs: Tue,Thu,Sat,Sun
+        Station                   Arr    Dep
+        Chennai Central             -  19:10
+        Katpadi                 21:03  21:05
+        Coimbatore              02:30  02:35
+        Thiruvananthapuram      11:45      -
+
+Departure time of the third station of train 12621:  timetable[12621]['stops'][2][2] = 02:50 | its name: Vijayawada
+Days of train 12433: ['Fri', 'Mon', 'Wed'] | does 12433 run on Tue? False
+
+Query: trains stopping at Katpadi on Tuesday, sorted by time (time, number):
+   [('07:45', 12007), ('15:15', 12609), ('21:05', 12695), ('22:05', 12163)] -> [('07:45', 'Shatabdi Express'), ('15:15', 'Mysuru Express'), ('21:05', 'Trivandrum Express'), ('22:05', 'Dadar Express')]
+Query: Chennai Central on Wednesday: [('06:10', 12433), ('13:30', 12609), ('22:00', 12621)] (12007 Shatabdi does not run on Wednesday, so it is absent)
+Query: unknown station 'Atlantis' on Mon: []
+Query: Chennai Egmore on Wed (12163 does not run on Wed): []
+Query: Chennai Egmore on Mon: [('20:10', 12163)]

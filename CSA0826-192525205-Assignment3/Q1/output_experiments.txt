@@ -1,0 +1,35 @@
+DERIVATION  (n days, window w = 7, n - 6 windows)
+  naive   : (n - 6) windows x 6 additions = 6(n - 6) additions   -> O(7n)
+  running : 6 additions for the first window + (n - 7) additions + (n - 7) subtractions = n - 1 additions, n - 7 subtractions -> O(n)
+       n |  naive adds (formula)   counted |  running adds (formula)   counted |  running subs (formula)  counted
+     365 |                  2154      2154 |                     364       364 |                     358      358
+   36500 |                218964    218964 |                   36499     36499 |                   36493    36493
+  365000 |               2189964   2189964 |                  364999    364999 |                  364993   364993
+
+Timings (best of 3, seconds)
+       n |  naive: sum(slice)  naive: python adds  running sum | ratio naive_py/running | predicted ratio 6(n-6)/(n-1+n-7)
+     365 |           0.000050            0.000068     0.000018 |                  3.74x |   2.98x (ops)
+   36500 |           0.005616            0.007205     0.002096 |                  3.44x |   3.00x (ops)
+  365000 |           0.060141            0.081920     0.026774 |                  3.06x |   3.00x (ops)
+running-sum floating-point drift vs naive at n = 365000: 3.4994229736184934e-13
+
+Cost of list operations (microseconds per operation)
+        n |   append    pop()  insert(0,x)   pop(0)  insert middle |  sort random  sort sorted
+     1000 |    0.054    0.034        0.170    0.093          0.135 |        128us          3us
+   100000 |    0.035    0.028       17.521   15.097          8.905 |      17374us        376us
+  1000000 |    0.166    0.043      405.896  328.143        212.905 |     256083us       4473us
+
+Late reading inserted at the correct date (list.insert in the middle):
+  n =     365: insert in the middle    0.203 us | assigning into a pre-sized slot 0.046 us
+  n =  365000: insert in the middle   36.963 us | assigning into a pre-sized slot 0.124 us
+
+Alternatives give the same averages (checked on 36,500 days).
+       n |  slice+sum  running (list)  deque re-sum  deque running  dict by date   (seconds)
+   36500 |     0.0061          0.0022        0.0052         0.0036        0.0299
+  365000 |     0.0665          0.0246        0.0529         0.0500        0.2781
+
+Memory of the stored data (365,000 readings) and of the moving window
+  list of readings        :     6.4 MB (the floats) -> container itself 2.9 MB
+  dict keyed by date      :    32.7 MB extra (date objects + hash table) on top of the float values already counted
+  deque(maxlen=7) window  : 760 bytes (constant, independent of n)
+  slice window            : a new 7-element list per day (about 112 bytes, freed at once)

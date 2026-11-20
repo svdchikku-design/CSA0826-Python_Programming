@@ -1,0 +1,9 @@
+list-of-lists and dictionary grids give identical counts for 5,000 boardings on a 50 x 40 grid: True
+
+  grid (rows x cols)  non-empty zones k |  list memory  dict memory |  list access  dict access
+       100 x 100                    490 |       0.09MB      0.046MB |      0.060us      0.097us
+      1000 x 1000                   999 |       8.07MB      0.038MB |      0.189us      0.117us
+      1000 x 1000                 95193 |       8.07MB     10.462MB |      0.180us      0.202us
+      3000 x 3000                  1000 |      72.19MB      0.037MB |      0.264us      0.144us
+
+A list of lists needs rows x cols cells whether or not anything happened; the dictionary needs only the zones that were used.

@@ -1,0 +1,31 @@
+INPUT (8 contacts):
+  0: {'name': 'Priya Sharma', 'phones': ['+91 98765-43210'], 'emails': ['Priya.S@Mail.com']}
+  1: {'name': 'Dr. Priya Sharma', 'phones': ['098765 43210', '044 2345 6789'], 'emails': []}
+  2: {'name': 'P. Sharma', 'phones': [], 'emails': ['priya.s@mail.com ', 'priya@work.in']}
+  3: {'name': 'Ravi Kumar', 'phones': ['9123456780'], 'emails': []}
+  4: {'name': 'Ravi Kumar', 'phones': ['9000011111'], 'emails': ['ravi.k@mail.com']}
+  5: {'name': 'Anita', 'phones': ['12345'], 'emails': ['not-an-email']}
+  6: {'name': 'Anita D', 'phones': None, 'emails': None}
+  7: {'name': 'Office Landline', 'phones': ['(044) 2345 6789'], 'emails': []}
+
+Normalisation examples:
+  norm_phone('+91 98765-43210') -> '9876543210'
+  norm_phone('098765 43210') -> '9876543210'
+  norm_phone('(044) 2345 6789') -> '4423456789'
+  norm_phone('12345') -> None
+  norm_phone('') -> None
+  norm_email('Priya.S@Mail.com ') -> 'priya.s@mail.com';  norm_email('not-an-email') -> None
+  norm_name('Dr. Priya Sharma') -> 'priya sharma'
+
+MERGED OUTPUT:
+  contacts [0, 1, 2, 7]: names=['office landline', 'p sharma', 'priya sharma'] phones=['4423456789', '9876543210'] emails=['priya.s@mail.com', 'priya@work.in']
+  contacts [3]: names=['ravi kumar'] phones=['9123456780'] emails=[]
+  contacts [4]: names=['ravi kumar'] phones=['9000011111'] emails=['ravi.k@mail.com']
+  contacts [5]: names=['anita'] phones=[] emails=[]
+  contacts [6]: names=['anita d'] phones=[] emails=[]
+
+8 contacts -> 5 merged people
+Hand-derived expected: {0,1,2,7} one person (0-1 phone, 0-2 email, 1-7 landline), {3}, {4}, {5}, {6} => 5 groups
+assertions passed; pairwise version gives identical groups: True
+
+Known limitation shown: the shared office landline (contact 7) pulled 'Office Landline' into Priya's group.

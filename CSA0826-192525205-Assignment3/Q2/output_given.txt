@@ -1,0 +1,7 @@
+bad : [[0, 7, 0, 0], [0, 7, 0, 0], [0, 7, 0, 0]]
+good: [[0, 7, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+True False
+T. Nagar
+TypeError: unhashable type: 'list'
+hash of a tuple works: True
+hash(list) -> unhashable type: 'list'

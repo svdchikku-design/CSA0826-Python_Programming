@@ -1,0 +1,26 @@
+1. Time to clean and convert (seconds, best of 5/3/3)
+  readings |  for + append  comprehension  map + filter | loop/comp  map/comp
+     10000 |        0.0024         0.0027        0.0025 |     0.88x     0.94x
+    100000 |        0.0254         0.0279        0.0263 |     0.91x     0.94x
+   1000000 |        0.2570         0.2767        0.2701 |     0.93x     0.98x
+identical results for all three sizes: True
+note: the comprehension version walks the data twice (one list for Celsius, one for Fahrenheit); a single comprehension of tuples would walk it once.
+   one-pass comprehension of (C, F) pairs at 1,000,000: 0.3158 s
+
+2. Memory: list comprehension versus generator expression (1,000,000 readings)
+   sys.getsizeof(list comprehension result) =  8,448,728 bytes (just the pointers; the 950,120 floats are shared with the input)
+   sys.getsizeof(generator expression)      =        208 bytes (a generator stores its position, not its values - whatever the input size)
+   n =    10,000: peak extra memory  sum([list comp]) =      83.2 KB | sum(generator) =   0.41 KB
+   n =   100,000: peak extra memory  sum([list comp]) =     782.2 KB | sum(generator) =   0.41 KB
+   n = 1,000,000: peak extra memory  sum([list comp]) =    8250.7 KB | sum(generator) =   0.41 KB
+
+3. Time of the alternative: sum of valid readings by list comprehension vs generator expression
+  readings |  sum(list comp)  sum(generator)
+     10000 |        0.00047s        0.00050s  (generator 1.07x)
+    100000 |        0.00485s        0.00511s  (generator 1.05x)
+   1000000 |        0.05148s        0.05164s  (generator 1.00x)
+
+4. A generator can be used only once, and cannot be indexed or measured:
+   first sum(g) = 12.0 | second sum(g) = 0 (exhausted)
+   len(generator) -> object of type 'generator' has no len()
+   generator[0]   -> 'generator' object is not subscriptable

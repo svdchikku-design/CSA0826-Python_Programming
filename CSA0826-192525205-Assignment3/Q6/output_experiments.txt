@@ -1,0 +1,18 @@
+indexed and scanning queries agree for every station and day of the 6-train timetable: True
+
+Derivation: without an index one query examines all S = total stops (about 12 per train) -> O(S) = O(12 T); with an index only the m trains that stop at the station -> O(m)
+ trains T  total stops S  avg trains/station m |  scan (ms/query)  index (us/query)  speed-up |  build index |  timetable  index extra
+      100           1223                   2.4 |            0.028              0.34       81x |       0.24ms |     0.29MB       0.13MB
+     1000          12147                  24.3 |            0.380              5.51       69x |       1.73ms |     2.71MB       0.85MB
+    10000         119858                 239.7 |            2.990             58.36       51x |      28.59ms |    27.61MB       8.61MB
+
+Special queries on the 10,000-train timetable:
+  unknown station 'Atlantis': [] []
+  train 10006 runs only on ['Fri', 'Mon', 'Wed']; at its first station Station419 on Tue it must be absent: True True
+  on Fri it is present:  True
+
+Alternative: one flat list of (train, station, arrival, departure, days) tuples scanned for every query
+ trains T    rows S |  flat scan (ms/query)  nested scan (ms)  index (us) |  flat list memory  nested+index memory
+      100      1223 |                 0.034             0.029        0.31 |            0.27MB               0.27MB
+     1000     12147 |                 0.332             0.345        2.22 |            2.61MB               3.51MB
+    10000    119858 |                 3.212             3.461       57.08 |           26.28MB              36.21MB

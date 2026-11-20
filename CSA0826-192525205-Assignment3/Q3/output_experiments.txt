@@ -1,0 +1,31 @@
+ complaints   words n  distinct d |  dict loop  list.count   Counter | list.count / dict | n*d comparisons
+       1000      8000         300 |    0.0022s     0.0225s   0.0023s |             10.4x |      2,400,000
+      10000     80000         300 |    0.0198s     0.2763s   0.0209s |             14.0x |     24,000,000
+     100000    800000         300 |    0.1905s     2.6463s   0.2071s |             13.9x |    240,000,000
+
+Growth when the number of complaints grows 10x (the vocabulary d stays about 300):
+  dict loop  : x9.1, x9.6   (O(n): about x10)
+  list.count : x12.3, x9.6   (O(n*d): about x10 while d is constant - but with a large constant 300)
+  Counter    : x9.2, x9.9
+
+When the vocabulary grows too (d proportional to n) the O(n*d) method becomes quadratic:
+  words n  distinct d |  dict loop  list.count
+     2000         868 |   0.00023s    0.01577s
+     4000        1764 |   0.00046s    0.08070s   (list.count doubled n -> time x5.1)
+     8000        3428 |   0.00104s    0.27477s   (list.count doubled n -> time x3.4)
+    16000        6928 |   0.00197s    1.24054s   (list.count doubled n -> time x4.5)
+
+Memory held by the counting structures for 100,000 complaints:
+  dict loop (peak):     31.2 KB   <- O(d)
+  list.count (peak):   45.10 MB   <- O(n): it first builds the whole list of words
+  Counter (peak)  :     31.7 KB   <- O(d)
+
+Average dictionary lookup time versus the number of keys (hash lookup does not depend on size):
+      1000 keys:   36.1 ns per lookup
+    100000 keys:  166.2 ns per lookup
+   1000000 keys:  399.2 ns per lookup
+   5000000 keys:  631.7 ns per lookup
+
+Top 10 words for 100,000 complaints (sorted by count desc, then alphabetical):
+  [('word000', 127574), ('word001', 63768), ('word002', 42388), ('word003', 31808), ('word004', 25431), ('word005', 21258), ('word006', 18317), ('word007', 15948), ('word008', 14027), ('word009', 12654)]
+  most_common(10) from Counter: True (ties may be ordered differently: Counter keeps first-seen order)

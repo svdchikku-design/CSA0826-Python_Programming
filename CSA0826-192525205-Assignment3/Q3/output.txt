@@ -1,0 +1,30 @@
+1. word frequencies (stop words removed, lower case, punctuation removed):
+   get()        : {'seeds': 4, 'received': 2, 'delayed': 3, 'fertiliser': 1, 'price': 4, 'subsidy': 2, 'pest': 1, 'attack': 1, 'pesticide': 2, 'available': 1}
+   setdefault() : {'seeds': 4, 'received': 2, 'delayed': 3, 'fertiliser': 1, 'price': 4, 'subsidy': 2, 'pest': 1, 'attack': 1, 'pesticide': 2, 'available': 1} | identical: True
+   top 5        : [('price', 4), ('seeds', 4), ('delayed', 3), ('pesticide', 2), ('received', 2)]
+
+2. complaints per district, with a dictionary of lists (setdefault creates the list the first time):
+   Thanjavur  3 complaint(s): ['Seeds not received, seeds delayed!', 'Seeds price high; subsidy not received', 'Pesticide price high and subsidy delayed']
+   Madurai    2 complaint(s): ['Fertiliser price HIGH.', 'Seeds delayed, price is high']
+   Salem      2 complaint(s): ['Pest attack - no pesticide available', '']
+
+3. complaints for each crop (empty text kept as a complaint with no words):
+   cotton  [('Madurai', 'Fertiliser price HIGH.'), ('Madurai', 'Seeds delayed, price is high'), ('Thanjavur', 'Pesticide price high and subsidy delayed')]
+   maize   [('Salem', 'Pest attack - no pesticide available')]
+   paddy   [('Thanjavur', 'Seeds not received, seeds delayed!'), ('Thanjavur', 'Seeds price high; subsidy not received'), ('Salem', '')]
+
+4. text tests:
+   empty text        ''                       -> {}
+   only punctuation  '!!! ... ???'            -> {}
+   upper/lower case  'SEEDS Seeds seeds'      -> {'seeds': 3}
+   punctuation       'seeds, seeds. seeds!'   -> {'seeds': 3}
+
+5. order of keys in Python 3.7+ is the order of first insertion (not alphabetical, not by count):
+    {'zebra': 2, 'apple': 2, 'mango': 1, 'kiwi': 1} -> keys: ['zebra', 'apple', 'mango', 'kiwi']
+
+6. views are live windows on the dictionary, not copies:
+   keys()  : dict_keys(['zebra', 'apple', 'mango', 'kiwi']) 
+   values(): dict_values([2, 2, 1, 1]) 
+   items() : dict_items([('zebra', 2), ('apple', 2), ('mango', 1), ('kiwi', 1)])
+   after d['banana'] = 9 the SAME view objects now show: ['zebra', 'apple', 'mango', 'kiwi', 'banana'] 9 ('banana', 9)
+   membership in keys() is a hash lookup: True | value 9 in values() is a scan: True

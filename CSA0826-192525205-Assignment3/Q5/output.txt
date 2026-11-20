@@ -1,0 +1,24 @@
+sample readings: [4.5, 99.0, 7.9, 8.1, -60.0, 2.0, 1.9, 5.5, 50.0, -50.0, 3.3]
+for loop + append      Celsius [4.5, 7.9, 8.1, 2.0, 1.9, 5.5, 50.0, -50.0, 3.3]
+                       Fahrenheit [40.1, 46.22, 46.58, 35.6, 35.42, 41.9, 122.0, -58.0, 37.94]
+list comprehension     Celsius [4.5, 7.9, 8.1, 2.0, 1.9, 5.5, 50.0, -50.0, 3.3]
+                       Fahrenheit [40.1, 46.22, 46.58, 35.6, 35.42, 41.9, 122.0, -58.0, 37.94]
+map + filter + lambda  Celsius [4.5, 7.9, 8.1, 2.0, 1.9, 5.5, 50.0, -50.0, 3.3]
+                       Fahrenheit [40.1, 46.22, 46.58, 35.6, 35.42, 41.9, 122.0, -58.0, 37.94]
+the three versions are identical on the sample: True
+alarm minutes (enumerate): [3, 6, 8, 9] -> readings [8.1, 1.9, 50.0, -50.0]
+   (99.0 and -60.0 are sensor errors and are NOT alarms; 50.0 and -50.0 are valid, so they ARE alarms)
+
+General form:  [ expression  for item in iterable  if condition ]   ==   result = []; for item in iterable: if condition: result.append(expression)
+
+Other comprehensions on the same data:
+  dict comprehension (minute -> Fahrenheit): {0: 40.1, 2: 46.2, 3: 46.6, 5: 35.6, 6: 35.4, 7: 41.9, 8: 122.0, 9: -58.0, 10: 37.9}
+  set comprehension (distinct whole-degree values): [-50, 2, 3, 4, 6, 8, 50]
+  generator expression: <generator object <genexpr> at 0x7fc4132962c0> -> sum of valid: 33.2
+  nested conditions in one comprehension (hard to read): ['HIGH', 'LOW', 'HIGH', 'LOW']
+
+Tests:
+  all valid    loop=([3.0, 4.0, 5.0], [37.4, 39.2, 41.0]) comp=([3.0, 4.0, 5.0], [37.4, 39.2, 41.0]) map=([3.0, 4.0, 5.0], [37.4, 39.2, 41.0]) alarms=[]
+  all invalid  loop=([], []) comp=([], []) map=([], []) alarms=[]
+  empty        loop=([], []) comp=([], []) map=([], []) alarms=[]
+  100,000 random readings: the three versions give identical lists: True; 95051 valid, 21334 alarm minutes

@@ -1,0 +1,11 @@
+digraph G { rankdir=LR; node [fontname="Helvetica", fontsize=10]; compound=true;
+subgraph cluster_bad { label="bad = [[0]*3]*3   (ONE inner list, three references)"; style=rounded; color="#cc0000";
+  b [shape=record, label="<h>bad|<r0>[0]|<r1>[1]|<r2>[2]"];
+  bl [shape=record, style=filled, fillcolor="#f4cccc", label="the single list object|0|0|0"];
+  b:r0 -> bl; b:r1 -> bl; b:r2 -> bl; }
+subgraph cluster_good { label="good = [[0]*3 for _ in range(3)]   (three separate lists)"; style=rounded; color="#2e7d32";
+  g [shape=record, label="<h>good|<r0>[0]|<r1>[1]|<r2>[2]"];
+  g0 [shape=record, style=filled, fillcolor="#d9ead3", label="list A|0|0|0"];
+  g1 [shape=record, style=filled, fillcolor="#d9ead3", label="list B|0|0|0"];
+  g2 [shape=record, style=filled, fillcolor="#d9ead3", label="list C|0|0|0"];
+  g:r0 -> g0; g:r1 -> g1; g:r2 -> g2; } }

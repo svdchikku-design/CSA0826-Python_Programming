@@ -1,0 +1,21 @@
+1. membership test x in list vs x in set (register numbers as 9-digit strings)
+        n |  list, x present (middle)  list, x absent (worst)  set, x present  set, x absent
+    10000 |                  44.36 us                63.46 us        0.040 us       0.029 us
+   100000 |                 346.67 us               780.27 us        0.071 us       0.047 us
+  1000000 |                4025.01 us              8193.90 us        0.215 us       0.059 us
+(the list time grows with n: O(n); the set time does not: O(1) average)
+
+2. finding the students common to two electives of n students each (overlap about 10 %)
+    n = m |  nested loops  sorted walk     set & | same result
+      500 |       0.0055s      0.231ms   0.043ms | True
+     1000 |       0.0217s      0.426ms   0.071ms | True   (nested: x3.9 for 2x n)
+     2000 |       0.0811s      0.881ms   0.172ms | True   (nested: x3.7 for 2x n)
+     4000 |       0.3299s      2.125ms   0.361ms | True   (nested: x4.1 for 2x n)
+larger sizes (nested loops would take hours; measured only the two fast methods):
+    n = m |  sorted walk     set &    nested loops (extrapolated from n=4000 x n^2)
+    10000 |       0.006s    0.001s                                        2 s  (~0.0 hours)
+   100000 |       0.086s    0.020s                                      206 s  (~0.1 hours)
+  1000000 |       1.434s    0.366s                                   20,618 s  (~5.7 hours)
+
+3. memory of a list and a set of 1,000,000 register numbers (container only, strings shared)
+   list:   8,448,728 bytes | set:  33,554,648 bytes (hash table with spare room)

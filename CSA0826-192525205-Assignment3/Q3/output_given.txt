@@ -1,0 +1,3 @@
+[('seeds', 3), ('price', 2), ('received', 2)]
+all counts: {'seeds': 3, 'received': 2, 'delayed': 1, 'fertiliser': 1, 'price': 2, 'subsidy': 1}
+sorted by count only (stable, keeps insertion order for ties): [('seeds', 3), ('received', 2), ('price', 2), ('delayed', 1), ('fertiliser', 1), ('subsidy', 1)]

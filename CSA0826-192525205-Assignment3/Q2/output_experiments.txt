@@ -1,0 +1,43 @@
+=== 1. The bug and its correction with 'is' and id() ===
+bad  ids of the 3 rows : [139971232880448, 139971232880448, 139971232880448] -> all identical: True
+good ids of the 3 rows : [139971231662528, 139971230457664, 139971230688064] -> all different: True
+after row 1, col 2 += 5 ->  bad : [[0, 0, 5], [0, 0, 5], [0, 0, 5]] 
+                            good: [[0, 0, 0], [0, 0, 5], [0, 0, 0]]
+
+=== 2. Aliasing, shallow copy, deep copy ===
+alias   is orig: True | shallow (slice) is orig: False | shallow (copy.copy) is orig: False | deep is orig: False
+inner lists shared?  shallow1[0] is orig[0]: True | shallow2[0] is orig[0]: True | deep[0] is orig[0]: False
+orig    : [[99, 2], [3, 4], [5, 6]]
+alias   : [[99, 2], [3, 4], [5, 6]]  <- sees both changes (same object)
+shallow1: [[99, 2], [3, 4]]  <- no new row, but inner list changed (shared)
+shallow2: [[99, 2], [3, 4]]  <- same as shallow1
+deep    : [[1, 2], [3, 4]]  <- independent of both changes
+a list of immutable items: copy is enough -> [100, 2, 3] [1, 2, 3]
+
+=== 3. A function that changes its list argument ===
+after add_stop(route, ...)      route = ['Central', 'T. Nagar']  (the parameter and 'route' are two names for ONE list)
+after add_stop_safe(route2, ...) route2 = ['Central'] | returned: ['Central', 'T. Nagar']
+rebinding the parameter inside a function leaves the caller's list: ['Central', 'T. Nagar']
+
+=== 4. Unpacking tuples in a for loop; tuples as dictionary keys ===
+  Chennai Central  lat=13.0827  lon=80.2707
+  T. Nagar         lat=13.0418  lon=80.2341
+  Egmore           lat=13.0674  lon=80.2376
+  lookup by tuple key: Egmore
+
+=== 5. A list stored inside a tuple ===
+t = ('route A', [1, 2, 3]) | id of the inner list: 139971230693632
+t[1].append(4) works  -> ('route A', [1, 2, 3, 4]) | same inner list: 139971230693632
+t[1] = [9] -> TypeError: 'tuple' object does not support item assignment
+t[1] += [5] -> TypeError: 'tuple' object does not support item assignment
+   ...yet the list WAS changed before the error: ('route A', [1, 2, 3, 4, 5])
+hash(t) -> unhashable type: 'list' (a tuple is hashable only if everything inside it is hashable)
+
+=== 6. Memory and time: list versus tuple of 1,000,000 values ===
+sys.getsizeof(list)  =  8,000,056 bytes
+sys.getsizeof(tuple) =  8,000,040 bytes   (difference 16 bytes: list(range()) is built to exact size; the list header holds an extra capacity field)
+a list grown by append() (spare capacity kept for future growth): 8,448,728 bytes
+(both only hold 8-byte references; the million int objects themselves are shared and not counted)
+create from range(1,000,000): list   23.57 ms | tuple   22.56 ms
+index 1004 positions     : list    29.5 us | tuple    28.6 us
+create a small 5-item literal (1,000,000 times):  list 0.033 s | tuple 0.008 s (the tuple of constants is built once at compile time)

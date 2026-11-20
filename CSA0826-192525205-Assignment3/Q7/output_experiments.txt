@@ -1,0 +1,28 @@
+A. Correctness against ground truth (shuffled input, mixed formats)
+  people  contacts n  groups found  every group is one person
+     100         202           100                       True
+    1000        2032          1000                       True
+   10000       20063         10000                       True
+
+B. Dictionary + union-find: time and memory
+ contacts n  time (s)  us per contact  peak memory (MB)  correct
+       1022     0.005            4.69              0.98     True
+      10058     0.064            6.38             10.74     True
+     100239     1.484           14.81            109.22     True
+
+C. The two required sizes: about 1,000 and 100,000 contacts
+  n = 982 contacts (target 1,000)
+    dictionary+DSU 24.24 ms | pairwise 38.1 ms | pairwise/dict = 2x | same groups: True
+  n = 99952 contacts (target 100,000)
+    dictionary+DSU 2.717 s (27.18 us per contact) groups=50000 correct=True
+
+D. Pairwise measured at small n, then extrapolated with n^2
+      n  pairs n(n-1)/2  pairwise (s)  ns per pair  dict+DSU (ms)
+    504          126756         0.011         84.8           2.37
+    989          488566         0.037         76.2           4.60
+   1984         1967136         0.147         74.8          11.24
+   3967         7866561         0.606         77.0          25.04
+  extrapolated pairwise at n=    1,000:          499,500 pairs x 76 ns = 0.0 s = 0.00 h
+  extrapolated pairwise at n=  100,000:    4,999,950,000 pairs x 76 ns = 379.4 s = 0.11 h
+  extrapolated pairwise at n=1,000,000:  499,999,500,000 pairs x 76 ns = 37,941.7 s = 10.54 h
+  measured dictionary+DSU at n=99,952: 2.72 s -> extrapolated pairwise is about 140x slower

@@ -1,0 +1,19 @@
+1. duplicates are removed by construction (a set holds each value once):
+   list with duplicates: ['192311001', '192311004', '192311001', '192311009', '192311004', '192311001'] | set: ['192311001', '192311004', '192311009'] | 6 entries ->  3 students
+   what is lost by the conversion: order and how often each appeared: {'192311001': 3, '192311009': 1, '192311004': 2}
+
+2. sets can hold tuples but not lists (an element must be hashable):
+   {(1, 2), (3, 4)} -> {(1, 2), (3, 4)}
+   {[1, 2]} -> TypeError: unhashable type: 'list'
+
+3. empty and identical electives:
+   A & empty = set() | A | empty = ['1', '2', '3'] | A ^ empty = ['1', '2', '3'] | A - empty = ['1', '2', '3'] | empty - A = set()
+   identical A, B:  A & B = ['1', '2', '3'] | A ^ B = set() (empty: nobody is in exactly one) | A | B = ['1', '2', '3'] | A == B: True
+   both empty:  set() set() set()
+   note: {} is an empty DICT; an empty set must be written set(): dict set
+
+4. small case verified by hand
+   AI = {S1,S2,S3,S4}  IoT = {S3,S4,S5}  all = {S1..S7}
+   by hand:  both = {S3,S4}; exactly one = {S1,S2,S5}; neither = {S6,S7}
+   program:  (['S3', 'S4'], ['S1', 'S2', 'S5'], ['S6', 'S7'])
+   matches the hand result: True
