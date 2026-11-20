@@ -1,0 +1,7 @@
+fast doubling equals the loop for n = 1..499: True
+        n |   loop (ms)  fast doubling (ms)    ratio | same answer?
+     1000 |       0.028               0.003     9.8x | True
+    10000 |       1.157               0.032    36.7x | True
+   100000 |     102.234               1.011   101.1x | True
+   300000 |     891.524               5.972   149.3x | True
+  1000000 |   (not run)              41.102         | bit length of the answer: 694242

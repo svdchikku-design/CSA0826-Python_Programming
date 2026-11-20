@@ -1,0 +1,13 @@
+3-attempt behaviour is identical:
+  ['483920']                   recursive=VERIFIED  loop=VERIFIED
+  ['1', '483920']              recursive=VERIFIED  loop=VERIFIED
+  ['', '1', '2', '3']          recursive=LOCKED    loop=LOCKED
+  ['1', '2', '3']              recursive=LOCKED    loop=LOCKED
+
+recursion limit = 1000
+ attempts a |  loop time  loop depth |  recursive time  recursive depth
+          3 |      1.4us           1 |           1.4us                4
+        100 |      5.6us           1 |          19.0us              101
+        900 |     41.5us           1 |         145.3us              901
+      10000 |    582.0us           1 |  RecursionError          > limit
+    1000000 |  47414.0us           1 |  RecursionError          > limit

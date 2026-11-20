@@ -1,0 +1,6 @@
+200000 lines, average of 3 runs
+method                          time (s)    peak memory (MB)   output size (chars)
+join of a list of parts           0.0292               15.92               3048890
+io.StringIO                       0.0286                6.86               3048890
+write line by line to a file      0.0307                0.05               3048890
+file content identical to the joined text: True

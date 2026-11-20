@@ -1,0 +1,7 @@
+The real rule has k = 3 slabs. Generated rules with more slabs show how the cost grows.
+Worst case = value that falls in the LAST slab (every test is tried); best case = first slab.
+    k |  elif worst  match worst  table worst  bisect worst |  elif best  table best | source lines elif/match | table entries
+    3 |     0.033us      0.037us      0.064us       0.045us |    0.026us     0.051us |     4/5               | 2
+   10 |     0.122us      0.112us      0.150us       0.053us |    0.027us     0.052us |    11/12              | 9
+  100 |     1.143us      1.349us      1.420us       0.064us |    0.025us     0.050us |   101/102             | 99
+ 1000 |    10.482us     13.284us     13.767us       0.084us |    0.026us     0.049us |  1001/1002            | 999

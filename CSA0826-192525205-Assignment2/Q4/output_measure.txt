@@ -1,0 +1,23 @@
+PREDICTION (before measuring): join and f-string+join grow ~linearly; += copies the growing text, so I expect it to be slowest and worse than linear.
+
+Average of 3 runs, seconds (perf_counter):
+    lines |     a) +=   b) join  c) f-string+join  (c) formatting only |  += on attribute | same text?
+     1000 |    0.0000    0.0000            0.0001               0.0001 |           0.0002 | True
+    10000 |    0.0005    0.0002            0.0012               0.0010 |           0.0150 | True
+   200000 |    0.0112    0.0034            0.0278               0.0230 | (skipped: too slow) | True
+
+The attribute case alone, to see the growth (each doubling of n):
+  n=  5000:   0.0036 s
+  n= 10000:   0.0160 s   x4.44 for 2x the lines
+  n= 20000:   0.0623 s   x3.89 for 2x the lines
+  n= 40000:   0.2552 s   x4.10 for 2x the lines
+  n= 80000:   1.9430 s   x7.61 for 2x the lines
+  (a factor near 2 means O(n); a factor near 4 means O(n^2) characters copied)
+
+Total characters copied if every += made a full copy (the worst case, n(n+1)/2 * average line length):
+  n=   1000: about 6,351,345 characters  vs  join: 12,690 characters
+  n=  10000: about 684,518,445 characters  vs  join: 136,890 characters
+  n= 200000: about 304,890,524,445 characters  vs  join: 3,048,890 characters
+
+Identity check - += really makes a new object in the general case:
+  s was shared with t, then s += 'c':  id changed = True | t is still 'ab'

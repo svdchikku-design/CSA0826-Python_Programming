@@ -1,0 +1,26 @@
+H   units   card    80+ | predicted | separate (bug)   separate chained  if-elif-else  nested   combined  | ok?
+H1     50   True  False | FULL      | FULL+PARTIAL     FULL              FULL          FULL     FULL      | yes
+H2    100  False  False | FULL      | FULL             FULL              FULL          FULL     FULL      | yes
+H3    100   True  False | FULL      | FULL+PARTIAL     FULL              FULL          FULL     FULL      | yes
+H4    101   True  False | PARTIAL   | PARTIAL          PARTIAL           PARTIAL       PARTIAL  PARTIAL   | yes
+H5    101  False  False | NONE      | NONE             NONE              NONE          NONE     NONE      | yes
+H6    200   True   True | PARTIAL   | PARTIAL          PARTIAL           PARTIAL       PARTIAL  PARTIAL   | yes
+H7    201  False   True | SENIOR    | SENIOR           SENIOR            SENIOR        SENIOR   SENIOR    | yes
+H8    201   True  False | NONE      | NONE             NONE              NONE          NONE     NONE      | yes
+
+all predictions confirmed by if-elif-else, chained separate ifs, nested and combined: True
+households receiving MORE THAN ONE decision from the buggy separate ifs: ['H1', 'H3']
+
+Boundary table (units x card x senior), if-elif-else result:
+ units | card=F,sen=F  card=F,sen=T  card=T,sen=F  card=T,sen=T
+     0 | FULL          FULL          FULL          FULL        
+     1 | FULL          FULL          FULL          FULL        
+    99 | FULL          FULL          FULL          FULL        
+   100 | FULL          FULL          FULL          FULL        
+   101 | NONE          NONE          PARTIAL       PARTIAL     
+   150 | NONE          NONE          PARTIAL       PARTIAL     
+   200 | NONE          NONE          PARTIAL       PARTIAL     
+   201 | NONE          SENIOR        NONE          SENIOR      
+   500 | NONE          SENIOR        NONE          SENIOR      
+
+nested, combined and if-elif-else agree on all 1600 test cases (units 0-399 x 4 flag combinations)

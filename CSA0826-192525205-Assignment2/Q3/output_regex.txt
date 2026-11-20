@@ -1,0 +1,28 @@
+registration    string methods  regex   same?
+'TN09AB1234'    True            True    yes
+'KA01M0007'     True            True    yes
+'TN9AB1234'     False           False   yes
+'TN221234AB'    False           False   yes
+'TN09ABC1234'   False           False   yes
+'T9AB1234'      False           False   yes
+''              False           False   yes
+'TN09AB123'     False           False   yes
+'TN09AB12345'   False           False   yes
+'TN０９AB１２３４'    True            False   <-- DIFFERENT
+'TN09ÄB1234'    True            False   <-- DIFFERENT
+'TN09AB١٢٣٤'    True            False   <-- DIFFERENT
+
+agree on 20,000 random valid-format plates: True
+
+microseconds per validation (best of 5 over 20,000 plates):
+  slicing + isalpha/isdigit : 0.159
+  re.fullmatch (compiled)   : 0.140
+  re.fullmatch (uncompiled) : 0.291
+
+Time versus the length L of the typed text (spaces inserted so normalise() must scan all of it):
+       L |  normalise + validate (string methods) |  normalise + validate (regex)
+      10 |                                0.26 us |                       0.25 us
+    1000 |                                7.64 us |                       7.62 us
+  100000 |                              760.81 us |                     765.47 us
+ 1000000 |                             7442.74 us |                    7465.06 us
+both grow linearly with L because normalise() has to read every character; the validation step itself is O(1) after the length guard

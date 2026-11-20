@@ -1,0 +1,22 @@
+sys.getrecursionlimit() = 1000
+
+1) Cold cache (fresh program state):
+   ways_memo(1000) -> RecursionError: maximum recursion depth exceeded
+   reason: ways_memo(1000) calls ways_memo(999) before it can add anything, ..., down to ways_memo(1): about 1000 nested frames, which hits the limit of 1000
+
+2) Warm cache (the program of the assignment first called ways_memo(25)):
+   ways_memo(1000) worked: the cache already holds n = 0..25, so the nesting is only about 975 deep (< limit); digits: 209
+
+3) Largest n that works with a cold cache and the default limit:
+   n = 999
+
+4) Raising the limit (sys.setrecursionlimit(5000)):
+   works for n = 1000 (209 digits); time 147 us, peak memory 133 KB (cache of 1001 entries)
+
+The three versions at n = 1000:
+  plain recursion : would make 210-digit number of calls (about 10^209); at the measured 25,219,324 calls/second that is more than 10^201 seconds (the universe is about 4x10^17 seconds old) - it cannot finish. NOT RUN.
+  memoised        :      147 us (cold cache, recursion limit raised), peak    133 KB, 1001 calls
+  loop, last two  :       33 us, peak    0.4 KB, 999 additions
+  memo == loop for n=1000: True
+  loop and memo agree for n = 1..300: True
+  loop for n = 100000 (no limit problem): about 20898 digits in 0.108 s

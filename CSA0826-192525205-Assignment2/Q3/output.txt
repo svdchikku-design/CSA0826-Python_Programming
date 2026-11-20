@@ -1,0 +1,14 @@
+tn 09 ab 1234   -> TN09AB1234  valid
+KA-01-M-0007    -> KA01M0007   valid
+TN9AB1234       -> TN9AB1234   INVALID
+TN 22 1234 AB   -> TN221234AB  INVALID
+
+Predictions versus observed:
+input             predicted     observed      valid? pred/obs  receipt format  ok
+'tn 09 ab 1234'   TN09AB1234    TN09AB1234    True/True        TN 09 AB 1234   yes
+'TN-09-AB-1234'   TN09AB1234    TN09AB1234    True/True        TN 09 AB 1234   yes
+'Tn09Ab1234'      TN09AB1234    TN09AB1234    True/True        TN 09 AB 1234   yes
+'  ka-01-m-0007 ' KA01M0007     KA01M0007     True/True        KA 01 M 0007    yes
+'TN09ABC1234'     TN09ABC1234   TN09ABC1234   False/False      -               yes
+'T9AB1234'        T9AB1234      T9AB1234      False/False      -               yes
+all six predictions correct: True

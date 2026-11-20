@@ -1,0 +1,106 @@
+
+=== A: right at once ===
+  while version:
+    customer types: '483920'
+  for   version:
+    customer types: '483920'
+  results: while=VERIFIED, for=VERIFIED, expected=VERIFIED, match=True
+
+=== B: 3 wrong, security OK, 4th correct ===
+  while version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> correct
+    security answer correct: 2 extra attempts granted
+    customer types: '483920'
+  for   version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> correct
+    security answer correct: 2 extra attempts granted
+    customer types: '483920'
+  results: while=VERIFIED, for=VERIFIED, expected=VERIFIED, match=True
+
+=== C: 3 wrong, security wrong ===
+  while version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> wrong
+    security answer wrong
+  for   version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> wrong
+  results: while=LOCKED, for=LOCKED, expected=LOCKED, match=True
+
+=== D: 3 wrong, security OK, 2 more wrong -> locked, no second chance ===
+  while version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> correct
+    security answer correct: 2 extra attempts granted
+    customer types: '4'
+    wrong OTP (4 of 5 used)
+    customer types: '5'
+    wrong OTP (5 of 5 used)
+  for   version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> correct
+    security answer correct: 2 extra attempts granted
+    customer types: '4'
+    wrong OTP (4 of 5 used)
+    customer types: '5'
+    wrong OTP (5 of 5 used)
+  results: while=LOCKED, for=LOCKED, expected=LOCKED, match=True
+
+=== E: 3 wrong, security OK, correct on 5th ===
+  while version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> correct
+    security answer correct: 2 extra attempts granted
+    customer types: '4'
+    wrong OTP (4 of 5 used)
+    customer types: '483920'
+  for   version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    security question asked -> correct
+    security answer correct: 2 extra attempts granted
+    customer types: '4'
+    wrong OTP (4 of 5 used)
+    customer types: '483920'
+  results: while=VERIFIED, for=VERIFIED, expected=VERIFIED, match=True

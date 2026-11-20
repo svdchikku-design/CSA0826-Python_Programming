@@ -1,0 +1,7 @@
+['Tea', 'Vada'] ['Tea', 'Vada']
+['Tea'] ['Vada']
+add_item_buggy.__defaults__ = (['Tea', 'Vada'],)
+add_item.__defaults__       = (None,)
+-> the default list was created ONCE, when 'def' ran; every call without 'order' appends to that same list object.
+   id of the default list: 140081610184512 | id of the list returned by each call: 140081610184512 140081610184512 (identical)
+   after two more calls the default has grown to ['Tea', 'Vada', 'Dosa', 'Idli']

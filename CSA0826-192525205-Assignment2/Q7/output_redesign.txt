@@ -1,0 +1,24 @@
+PREDICTIONS (written before measuring):
+  n=30 operations : 2,692,537 calls -> 29 additions (a reduction of about 92,800x)
+  n=30 time       : naive about 0.25 s (from the diagnosis) -> a few microseconds (about 10^4-10^5 x faster)
+  n=1000          : naive impossible; redesign about 30-150 microseconds, no RecursionError
+  extra space     : O(1): two integers, instead of a 1001-entry cache or 1000 stack frames
+  n=100000        : the loop still works (no recursion limit); time grows faster than linearly because the integers have ~20,000 digits
+
+Correctness: redesign equals the original for every n = 0..30: True
+Redesign equals the hand values for n = 1..6 (1, 2, 3, 5, 8, 13): [1, 2, 3, 5, 8, 13]
+
+   n |  original calls  redesign additions  call reduction |  original time  redesign time   speed-up
+  10 |             177                   9             20x |       0.010 ms       0.340 us        30x
+  20 |           21891                  19           1152x |       0.991 ms       0.689 us      1439x
+  25 |          242785                  24          10116x |      10.702 ms       0.841 us     12719x
+  30 |         2692537                  29          92846x |     119.336 ms       1.000 us    119322x
+
+Larger inputs (the original cannot run these):
+       n |  redesign time  additions  peak memory | memoised recursion (default limit)
+    1000 |        46.6 us        999       0.5 KB | RecursionError
+   10000 |      1343.8 us       9999       2.9 KB | RecursionError
+  100000 |    102812.1 us      99999      27.3 KB | RecursionError
+
+Where the original (memoised) design is still preferable - many queries of different n:
+  answering ways(1)..ways(1000) once each:  redesign called 1000 times: 21.21 ms (499500 additions) | memoised (shared cache): 0.20 ms (1000 additions) | one pass building a table: 0.070 ms (999 additions)

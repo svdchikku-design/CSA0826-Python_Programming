@@ -1,0 +1,10 @@
+default None : [['Tea'], ['Vada']]
+explicit list: [['Tea'], ['Vada']]
+closures     : [['Tea'], ['Vada']]
+
+microseconds per item added (300000 items): default None 0.062 | explicit 0.056 | closure 0.058
+
+bytes per customer holding 5 items (average over 100000 customers):
+  default None : 128  (a list of 5 references)
+  explicit list: 128  (the same list)
+  closure      : 376  (list + function object + cell: constant extra overhead per customer)

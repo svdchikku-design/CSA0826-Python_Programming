@@ -1,0 +1,96 @@
+
+=== S1 correct at once ===
+  while version:
+    customer types: '483920'
+    OTP correct on attempt 1
+  for   version:
+    customer types: '483920'
+    OTP correct on attempt 1
+  results: while=VERIFIED, for=VERIFIED, expected=VERIFIED, match=True
+
+=== S2 wrong, then correct ===
+  while version:
+    customer types: '111111'
+    wrong OTP (1 of 3 used)
+    customer types: '483920'
+    OTP correct on attempt 2
+  for   version:
+    customer types: '111111'
+    wrong OTP (1 of 3 used)
+    customer types: '483920'
+    OTP correct on attempt 2
+  results: while=VERIFIED, for=VERIFIED, expected=VERIFIED, match=True
+
+=== S3 blanks do not count ===
+  while version:
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: '483920'
+    OTP correct on attempt 1
+  for   version:
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: '483920'
+    OTP correct on attempt 1
+  results: while=VERIFIED, for=VERIFIED, expected=VERIFIED, match=True
+
+=== S4 three wrong -> lock ===
+  while version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    3 wrong attempts: account LOCKED for 30 minutes
+  for   version:
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    3 wrong attempts: account LOCKED for 30 minutes
+  results: while=LOCKED, for=LOCKED, expected=LOCKED, match=True
+
+=== S5 blank, 2 wrong, blank, 1 wrong -> lock ===
+  while version:
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    3 wrong attempts: account LOCKED for 30 minutes
+  for   version:
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: '1'
+    wrong OTP (1 of 3 used)
+    customer types: ''
+    blank entry - ignored, attempt NOT counted
+    customer types: '2'
+    wrong OTP (2 of 3 used)
+    customer types: '3'
+    wrong OTP (3 of 3 used)
+    3 wrong attempts: account LOCKED for 30 minutes
+  results: while=LOCKED, for=LOCKED, expected=LOCKED, match=True
+
+=== BUG 1: counter updated BEFORE the blank test ===
+  customer enters: blank, blank, '1', '483920' (only ONE wrong try)
+    blank entry - ignored, attempt NOT counted
+    blank entry - ignored, attempt NOT counted
+    wrong OTP (1 of 3 used)
+    OTP correct on attempt 2
+  buggy result: LOCKED   (correct design gives VERIFIED: VERIFIED )
+
+=== BUG 2: counter at the END of the loop body, but 'continue' skips it ===
+  attempts=0, loop ran 8 times (would never lock: infinite loop without the safety net)

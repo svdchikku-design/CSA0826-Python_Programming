@@ -1,0 +1,18 @@
+s = 'tn09ab1234' | id(s) = 140318408864944
+s[0] = 'T'  ->  TypeError: 'str' object does not support item assignment
+s.upper() returned 'TN09AB1234' | s is still 'tn09ab1234' | different objects: True
+s = s.upper() re-binds the NAME to the new string: id(s) = 140318408880688
+
+9 characters: 'KA01M0007' len=9
+   plate[-4:]  = '0007'    (last four characters: the digits)
+   plate[4:-4] = 'M'   (from index 4 up to, not including, the 4th from the end: the series letters)
+   plate[:2] = 'KA', plate[2:4] = '01'
+10 characters: 'TN09AB1234' len=10
+   plate[-4:]  = '1234'    (last four characters: the digits)
+   plate[4:-4] = 'AB'   (from index 4 up to, not including, the 4th from the end: the series letters)
+   plate[:2] = 'TN', plate[2:4] = '09'
+
+Limitations of isalpha()/isdigit() (they accept more than A-Z and 0-9):
+   'TN０９AB１２３４'           -> is_valid? True
+   'TN09ÄB1234'           -> is_valid? True
+   'TN09AB١٢٣٤'           -> is_valid? True
