@@ -1,0 +1,36 @@
+1. E-mail validation with string methods
+   'arun@simats.edu.in'     -> True  (expected True) OK
+   'a@b.co'                 -> True  (expected True) OK
+   'bala@simats'            -> False (expected False) OK
+   'gokul@@x.in'            -> False (expected False) OK
+   'kavin simats.edu.in'    -> False (expected False) OK
+   '@x.in'                  -> False (expected False) OK
+   'a@.in'                  -> False (expected False) OK
+   'a@x.'                   -> False (expected False) OK
+   'a@x..in'                -> False (expected False) OK
+   'a@x.c'                  -> False (expected False) OK
+   ''                       -> False (expected False) OK
+
+2. Single-line parsing
+    ('192300005', 'Elango', 'CSE', 'elango@simats.edu.in', ['Mime', 'Quiz'])
+    '1,2,3'                            -> InvalidRegistration: expected 5 fields, found 3
+    '192300001,,CSE,a@b.in,Quiz'       -> InvalidRegistration: empty name
+    '192300001,X,,a@b.in,Quiz'         -> InvalidRegistration: empty department
+    '192300001,X,CSE,a@b.in, ; '       -> InvalidRegistration: no event chosen
+
+3. Whole-program cases (data_demo/)
+   [PASS] clean lines accepted (7 unique students)
+   [PASS] duplicate registration kept once, events merged
+   [PASS] invalid e-mail rejected and logged with file and line
+   [PASS] damaged line (3 fields) logged
+   [PASS] missing department file (IT.txt) logged, run completed
+   [PASS] blank line skipped, not an error
+   [PASS] no rejected student in the master list
+
+4. Extra failure cases the program must survive
+   Latin-1 byte in CSE.txt  -> [('ENCODING', 'CSE.txt', 2, 'undecodable byte replaced with U+FFFD; check the name')] | students kept: 2
+   a folder named ECE.txt   -> [('UNREADABLE', 'ECE.txt', 0, 'IsADirectoryError: Is a directory')]
+   permission denied (simulated; sandbox runs as root) -> [('UNREADABLE', 'CSE.txt', 0, 'permission denied')]
+   whole input folder missing -> run completed, missing files: 5 | master written: True
+
+All checks passed.

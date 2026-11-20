@@ -1,0 +1,4 @@
+192300005,Student 05,ECE,student05@simats.edu.in,Drama
+192300006,Student 06,ECE,student06@simats.edu.in,Singing;Dance
+192300007,Student 07,ECE,student07@simats.edu.in,Dance;Drama;Singing
+192300008,Student 08,ECE,student08@simats.edu.in,Mime;Singing;Quiz

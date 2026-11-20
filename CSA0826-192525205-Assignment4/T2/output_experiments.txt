@@ -1,0 +1,10 @@
+Derivation: one pass = O(f*l) line reads, memory O(s) counters. Re-scan per student = O(s*f*l) line reads, memory O(1) extra.
+
+    s   f     l |  lines read once f*l  lines read re-scan s*f*l |  one pass (s)  re-scan (s)   ratio | same answer
+   20  10   200 |                2,000                    40,000 |        0.0025       0.0103      4x | True
+   40  10   200 |                2,000                    80,000 |        0.0012       0.0155     13x | True
+   80  10   200 |                2,000                   160,000 |        0.0015       0.0300     20x | True
+  160  10   200 |                2,000                   320,000 |        0.0017       0.0603     35x | True
+
+Doubling s doubled the re-scan time (x2) while the one-pass time barely moved: O(s*f*l) versus O(f*l).
+A realistic month: 30 files x 5,000 lines, 3,000 students: one pass 150,000 line reads; re-scan 450,000,000 line reads.

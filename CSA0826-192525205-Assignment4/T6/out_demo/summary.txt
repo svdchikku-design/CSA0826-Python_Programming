@@ -1,0 +1,15 @@
+files read: 4
+missing files: 1
+unreadable files: 0
+lines read: 14
+unique students: 7
+duplicates: 1
+invalid records: 5
+damaged lines: 1
+encoding warnings: 0
+participants per event:
+  Dance: 3
+  Drama: 1
+  Mime: 2
+  Quiz: 4
+  Singing: 1

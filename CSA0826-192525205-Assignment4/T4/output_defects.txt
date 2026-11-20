@@ -1,0 +1,11 @@
+=== Defect 1 and 2: three days processed, then the log is printed ===
+'Operating System Concepts'
+-> only Wednesday's book survives (mode 'w' truncates the file on every open) -> Monday and Tuesday are lost
+Tuesday alone: 'Data Structures in CClean CodeSICP'  -> titles run together: write(b) adds no newline
+
+=== Defect 3: a write() fails while the log is open ===
+   process() let the error escape (only FileNotFoundError is caught): disk full (simulated)
+   log file still open after the error: True | open descriptors 4 -> 5
+   data written before the failure may still be in the buffer, not on disk; the traceback was not saved anywhere
+   missing file is reported with only the word 'missing': missing
+   (no file name, no date, nothing written to a log - the office cannot tell which day failed)

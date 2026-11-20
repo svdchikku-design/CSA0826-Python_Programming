@@ -1,0 +1,11 @@
+Both use the same validation; only the duplicate test differs. About 10 % of registrations are duplicates.
+
+       n  list search (s)  set lookup (s)    ratio  list x per doubling |  list mem (KB)  set mem (KB) | same result
+    2000           0.0123         0.00020      60x                    - |             16           160 | True
+    4000           0.0521         0.00030     173x                 x4.2 |             29           160 | True
+    8000           0.2195         0.00097     227x                 x4.2 |             58           640 | True
+   16000           1.0000         0.00135     742x                 x4.6 |            119           640 | True
+   32000           5.6903         0.00503    1131x                 x5.7 |            241          2560 | True
+  extrapolated list search at n =   100,000: about 56 s = 0.9 minutes (time grows as n^2; not run)
+  extrapolated list search at n = 1,000,000: about 5,557 s = 92.6 minutes (time grows as n^2; not run)
+  measured set lookup at n = 1,000,000: 0.97 s

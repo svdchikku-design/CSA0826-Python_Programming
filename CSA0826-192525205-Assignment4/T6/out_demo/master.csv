@@ -1,0 +1,8 @@
+register_no,name,department,email,events
+192300001,Arun Kumar,CSE,arun.kumar@simats.edu.in,Dance;Drama;Quiz
+192300003,Charu Latha,CSE,charu@simats.edu.in,Singing
+192300005,Elango,CSE,elango@simats.edu.in,Mime;Quiz
+192300006,Fathima,ECE,fathima@simats.edu.in,Dance
+192300010,Jeeva,MECH,jeeva@simats.edu.in,Dance;Quiz
+192300012,Lakshmi,CIVIL,lakshmi@simats.edu.in,Mime
+192300013,Mani,CIVIL,mani@simats.edu.in,Quiz

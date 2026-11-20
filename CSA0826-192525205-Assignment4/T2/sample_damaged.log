@@ -1,0 +1,2 @@
+2026-10-08_room101.txt,3,expected 3 fields, found 2
+2026-10-08_room101.txt,4,invalid status 'X'

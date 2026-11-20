@@ -1,0 +1,6 @@
+Adding the report 'absent three consecutive days' to each organisation
+organisation .py files  files changed  changed files (lines added)
+a_script             1              1  attendance_all.py (+21)
+b_module             2              2  attendance_lib.py (+20), main_b.py (+1)
+c_modules            4              3  main_c.py (+1), report.py (+5), stats.py (+15)
+d_package            5              3  attendance/report.py (+5), attendance/stats.py (+15), main_d.py (+1)

@@ -1,0 +1,2 @@
+192300010,Jeeva,MECH,jeeva@simats.edu.in,Quiz;Dance
+192300011,Kavin,MECH,kavin simats.edu.in,Drama

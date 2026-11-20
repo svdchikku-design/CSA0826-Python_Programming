@@ -1,0 +1,8 @@
+INVALID	CSE.txt	line 2	invalid e-mail 'bala@simats'
+DAMAGED	CSE.txt	line 4	expected 5 fields, found 3
+DUPLICATE	ECE.txt	line 2	192300001 already registered at CSE.txt line 1; 1 new event(s) merged
+INVALID	ECE.txt	line 3	invalid e-mail 'gokul@@simats.edu.in'
+INVALID	ECE.txt	line 4	register number '19230008' is not 9 digits
+INVALID	ECE.txt	line 5	no event chosen
+INVALID	MECH.txt	line 2	invalid e-mail 'kavin simats.edu.in'
+MISSING	IT.txt	line 0	department file not found
