@@ -1,0 +1,20 @@
+loaded 3,924,480 rows (112 stations x 365 days x 96 readings) in 4.7 s; database file 134 MB
+
+BEFORE the index (best of 3)
+  Q1 one station, one day (a lookup)         131.5 ms   plan: SCAN aq
+  Q2 one station, whole year by day          129.4 ms   plan: SCAN aq | USE TEMP B-TREE FOR GROUP BY
+  Q3 all stations, one day                   126.6 ms   plan: SCAN aq | USE TEMP B-TREE FOR GROUP BY
+  Q4 all stations, whole year                782.1 ms   plan: SCAN aq | USE TEMP B-TREE FOR GROUP BY
+  slowest overall: Q4 all stations, whole year
+
+CREATE INDEX idx_station_day ON aq (station, day): 1.38 s; database file now 228 MB
+
+AFTER the index (best of 3)
+  query                                  before ms  after ms  speed-up   same result   plan
+  Q1 one station, one day (a lookup)         131.5      0.01    14052x   True          SEARCH aq USING INDEX idx_station_day (station=? AND day=?)
+  Q2 one station, whole year by day          129.4      3.09       42x   True          SEARCH aq USING INDEX idx_station_day (station=?)
+  Q3 all stations, one day                   126.6    140.18        1x   True          SCAN aq USING INDEX idx_station_day
+  Q4 all stations, whole year                782.1    304.39        3x   True          SCAN aq USING INDEX idx_station_day
+
+Cost of the index when data arrive: insert 100,000 new readings with and without the index
+  with index: 0.122 s | without index: 0.047 s | the index makes inserts 2.6x slower

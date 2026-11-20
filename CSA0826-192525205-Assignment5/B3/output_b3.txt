@@ -1,0 +1,30 @@
+B3.1 correctness on small data: 3 stations, 7 days (504 readings)
+   groups: loops 21, pandas 21, SQL 21, one-pass 21 (3 stations x 7 days = 21)
+   loops == pandas: True | loops == SQL: True | loops == one-pass: True
+   hand check ('S001', '2026-01-01'): 24 readings, mean 49.8792; loops 49.8792, pandas 49.8792, SQL 49.8792
+
+B3.2 time (seconds, best of 3 for the smaller sizes, 1 run for 120 stations) - includes reading the CSV / loading the database
+stations   readings |  loops+csv   pandas  SQL load  SQL query  SQL total  one-pass | same results
+       1      8,760 |      0.013    0.005     0.009      0.002      0.011     0.009 |         True
+      12    105,120 |      0.155    0.035     0.115      0.027      0.142     0.111 |         True
+     120  1,051,200 |      1.558    0.428     1.164      0.310      1.474     1.148 |         True
+   (SQL load = insert every row; SQL query = the GROUP BY on data already in the database)
+
+B3.3 cProfile of the plain-Python loops version on 120 stations (1,051,200 rows)
+         15119796 function calls in 5.274 seconds
+   Ordered by: internal time
+   List reduced from 44 to 8 due to restriction <8>
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+  1051201    1.212    0.000    2.018    0.000 /usr/local/lib/python3.13/csv.py:174(__next__)
+        1    0.689    0.689    5.274    5.274 /home/claude/csa08_a5/B3/b3_compare.py:18(by_loops)
+    43800    0.467    0.000    1.980    0.000 /usr/local/lib/python3.13/statistics.py:158(_sum)
+  1051202    0.375    0.000    0.379    0.000 {built-in method builtins.next}
+  2102401    0.250    0.000    0.250    0.000 /usr/local/lib/python3.13/csv.py:160(fieldnames)
+  1051200    0.216    0.000    0.406    0.000 /usr/local/lib/python3.13/statistics.py:291(_exact_ratio)
+   305272    0.216    0.000    0.286    0.000 /usr/local/lib/python3.13/fractions.py:203(__new__)
+  1051200    0.190    0.000    0.190    0.000 {method 'as_integer_ratio' of 'float' objects}
+
+Alternative: memory of storing all readings first versus one pass (120 stations, tracemalloc peak)
+   store all readings, then statistics.mean         50.2 MB peak, 43,800 groups kept
+   one pass, running sum and count                  17.9 MB peak, 43,800 groups kept
+   groups = stations x days = 120 x 365 = 43,800; readings n = 1,051,200

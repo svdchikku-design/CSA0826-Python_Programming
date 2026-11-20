@@ -1,0 +1,53 @@
+BEFORE cleaning (13 raw rows):
+ # station  date        hr   pm25  pm10   no2  temp   problem
+ 0 Adyar    2026-10-01  00   48.0  80.1  30.2  28.5   
+ 1 Adyar    2026-10-01  01         85.0  31.0  28.1   blank PM2.5
+ 2 Adyar    2026-10-01  02     NA  86.0  31.5  27.9   'NA' PM2.5
+ 3 Adyar    2026-10-01  03   -5.0  70.0  29.0  27.5   negative PM2.5
+ 4 Adyar    2026-10-01  04   9999  90.0  33.0  27.0   impossible PM2.5 (9999)
+ 5 Adyar    2026-10-01  05   52.0    --  32.0  27.2   text '--' in PM10
+ 6 Adyar    2026-10-01  06   55.0  95.0  34.0  27.8   ok
+ 7 Adyar    2026-10-01  06   55.0  95.0  34.0  27.8   exact duplicate of row 6
+ 8 ADYAR    02/10/2026  00   60.0 100.0  36.0  28.0   station 'ADYAR ' (case, space) and date 02/10/2026
+ 9 Adyar    2026-10-02  24   61.0 101.0  36.5  28.0   hour 24 does not exist
+10 Manali   2026-10-01  00   90.0 150.0  40.0  84.2   Manali temperature in Fahrenheit (84.2 F)
+11 Manali   2026-10-01  01     NA 155.0  41.0  83.1   Manali PM2.5 missing
+12 Manali   2026-10-01  02   95.0 160.0  42.0    NA   Manali temperature 'NA'
+
+AFTER cleaning (11 rows; None = still missing):
+station  date        hr   pm25   pm10    no2  temp_C
+Adyar    2026-10-01   0   48.0   80.1   30.2    28.5
+Adyar    2026-10-01   1   48.0   85.0   31.0    28.1
+Adyar    2026-10-01   2   48.0   86.0   31.5    27.9
+Adyar    2026-10-01   3   48.0   70.0   29.0    27.5
+Adyar    2026-10-01   4   None   90.0   33.0    27.0
+Adyar    2026-10-01   5   52.0   90.0   32.0    27.2
+Adyar    2026-10-01   6   55.0   95.0   34.0    27.8
+Adyar    2026-10-02   0   60.0  100.0   36.0    28.0
+Manali   2026-10-01   0   90.0  150.0   40.0    29.0
+Manali   2026-10-01   1   90.0  155.0   41.0    28.4
+Manali   2026-10-01   2   95.0  160.0   42.0    28.4
+
+cleaning report:
+  duplicate rows removed: 1
+  pm10 forward-filled: 1
+  pm10 missing/non-numeric -> missing: 1
+  pm25 forward-filled: 4
+  pm25 left missing: 1
+  pm25 missing/non-numeric -> missing: 3
+  pm25 out of range -> missing: 2
+  rows dropped: bad date or hour: 1
+  rows read: 13
+  temp forward-filled: 1
+  temp missing/non-numeric -> missing: 1
+  temperatures converted F -> C: 2
+
+expected by hand: Adyar 00 keeps 48.0; hours 01,02 (blank, NA) are filled with 48.0 (forward fill, gap 1 and 2);
+hour 03 (-5 -> missing) is filled with 48.0 (gap 3); hour 04 (9999 -> missing) stays missing (gap would be 4, limit is 3);
+hour 05 PM10 '--' is filled with the previous valid PM10 (90.0); duplicate hour 06 and the hour-24 row are removed; Manali temp 84.2 F = 29.0 C.
+  check Adyar 2026-10-01 01 pm25: got 48.0, expected 48.0 -> OK
+  check Adyar 2026-10-01 03 pm25: got 48.0, expected 48.0 -> OK
+  check Adyar 2026-10-01 04 pm25: got None, expected None -> OK
+  check Adyar 2026-10-01 05 pm10: got 90.0, expected 90.0 -> OK
+  check Manali 2026-10-01 00 temp: got 29.0, expected 29.0 -> OK
+all checks passed

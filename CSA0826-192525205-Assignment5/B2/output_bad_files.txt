@@ -1,0 +1,8 @@
+file                  NAIVE loader (clean_file)                           DEFENSIVE loader (safe_load)
+good.csv              1 row(s) cleaned                                    1 row(s); encoding utf-8; delimiter ','; station 'Adyar'
+missing_column.csv    KeyError: 'pm10'                                    BadFile: missing column(s): pm10 -> logged, file skipped
+wrong_delimiter.csv   KeyError: 'station'                                 1 row(s); encoding utf-8; delimiter ';'; station 'Adyar'
+latin1_encoding.csv   UnicodeDecodeError: 'utf-8' codec can't decode byt  1 row(s); encoding cp1252 (fallback: not valid UTF-8; check names); delimiter ','; station 'Tâgore Nagar °'
+utf16_encoding.csv    UnicodeDecodeError: 'utf-8' codec can't decode byt  1 row(s); encoding utf-16 (byte-order mark); delimiter ','; station 'Adyar'
+empty.csv             0 row(s) cleaned                                    BadFile: file is empty -> logged, file skipped
+header_only.csv       0 row(s) cleaned                                    BadFile: header only, no data rows -> logged, file skipped

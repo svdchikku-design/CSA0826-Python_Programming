@@ -1,0 +1,58 @@
+60 complaints written for this assignment, labelled by my own reading (positive/negative/neutral) and with the main sentence marked.
+
+1. SENTIMENT: lexicon + negation scorer (the TODO program's lexicon) against my labels
+   agreement: 50 of 60 = 83%
+   my reading \ program   positive negative  neutral  total  right
+   positive                     17        1        2     20     17
+   negative                      3       22        3     28     22
+   neutral                       0        1       11     12     11
+
+   the 10 disagreements:
+   [negative -> program says positive, score +1] The air is not bad today. But the smell near the factory is worse than yesterday.
+   [positive -> program says negative, score -1] The helpline was never not helpful. Every call was answered.
+   [neutral -> program says negative, score -1] The smoke alarm of the monitoring room rings all day. It is annoying but I think it is just a test.
+   [negative -> program says neutral, score +0] The helpline number printed in the notice is wrong. I called a pizza shop. Please correct it.
+   [negative -> program says positive, score +1] The air is so good that I had to wear a mask on the way to office.
+   [negative -> program says neutral, score +0] Our complaint about noise was closed without any reply. The helpline is useless.
+   [negative -> program says neutral, score +0] The SMS alert came very late. By then the smoke had already spread. Alerts must be fast.
+   [negative -> program says positive, score +1] The helpline was good. But the engineer never came on the promised day.
+   [positive -> program says neutral, score +0] Thank you for the quick reply. My complaint was solved.
+   [positive -> program says neutral, score +0] The public hearing was well organised. Everyone could speak.
+
+2. SUMMARISER: top-1 sentence by word frequency versus first sentence, compared with the sentence I marked as the main point
+   complaints with more than one sentence: 58
+   frequency-based summariser picks my main sentence: 51 of 60
+   first-sentence summariser picks my main sentence:  56 of 60
+   complaints where my main sentence is NOT the first one: 4
+   cases where the two summarisers differ (first sentence vs frequency):
+     frequency: 'They fixed my sensor complaint in two days.'                first: 'The helpline was helpful.'                        mine: 'The helpline was helpful.'
+     frequency: 'The staff were rude when I finally got through.'            first: 'Nobody answered the helpline for three days.'     mine: 'Nobody answered the helpline for three days.'
+     frequency: 'But the smell near the factory is worse than yesterday.'    first: 'The air is not bad today.'                        mine: 'But the smell near the factory is worse than yesterday.'
+     frequency: 'The driver was rude to an old man.'                         first: 'The bus was slow and dirty.'                      mine: 'The bus was slow and dirty.'
+     frequency: 'Garbage is not collected for ten days.'                     first: 'Our street is dirty.'                             mine: 'Our street is dirty.'
+     frequency: 'The complaint number works on the website.'                 first: 'I received the acknowledgement fast.'             mine: 'I received the acknowledgement fast.'
+     frequency: 'They never gave a name of anyone else.'                     first: 'The staff said it is not their department.'       mine: 'The staff said it is not their department.'
+     frequency: 'Both problems started after the road work.'                 first: 'We have no water supply and the air is bad.'      mine: 'We have no water supply and the air is bad.'
+     frequency: 'But the engineer never came on the promised day.'           first: 'The helpline was good.'                           mine: 'But the engineer never came on the promised day.'
+   example summaries (k=1):
+     The smoke from the brick kiln is bad every evening. My children cough at night. Please send an inspector.
+       -> frequency: The smoke from the brick kiln is bad every evening.
+       -> first:     The smoke from the brick kiln is bad every evening.
+     Burning of garbage near our school is a daily problem. The smoke enters the classrooms. Teachers are worried.
+       -> frequency: Burning of garbage near our school is a daily problem.
+       -> first:     Burning of garbage near our school is a daily problem.
+     Dust from the construction site covers our cars every morning. Water spraying is not done. The contractor is rude.
+       -> frequency: Dust from the construction site covers our cars every morning.
+       -> first:     Dust from the construction site covers our cars every morning.
+     The sensor reading is bad for children. The school is next to the factory.
+       -> frequency: The sensor reading is bad for children.
+       -> first:     The sensor reading is bad for children.
+
+3. SPEED at the new scale: 50,000 complaints (the 60 repeated)
+   sentiment label()           0.081 s for 50,000 complaints = 1.6 us each; peak memory for 1,000 complaints 18 KB
+   summariser by frequency     0.593 s for 50,000 complaints = 11.9 us each; peak memory for 1,000 complaints 191 KB
+   summariser first sentence   0.049 s for 50,000 complaints = 1.0 us each; peak memory for 1,000 complaints 184 KB
+
+4. First-k time grows with the number of sentences kept, not the length: one long complaint (2,000 words) with k=1
+   frequency          1570.9 us per call on 3006 words
+   first sentence        0.7 us per call on 3006 words

@@ -1,0 +1,50 @@
+cleaned 12 files in 0.08 s -> 8928 rows
+cleaning report for the whole network:
+  duplicate rows removed                  116
+  no2 forward-filled                       73
+  no2 left missing                          1
+  no2 missing/non-numeric -> missing       74
+  pm10 forward-filled                      74
+  pm10 missing/non-numeric -> missing      74
+  pm25 forward-filled                     206
+  pm25 left missing                         2
+  pm25 missing/non-numeric -> missing      71
+  pm25 out of range -> missing            137
+  rows read                              9044
+  temp forward-filled                      84
+  temp missing/non-numeric -> missing      84
+  temperatures converted F -> C          1470
+  check: rows read 9044 - duplicates 116 - dropped 0 = 8928 (rows stored: 8928)
+
+executemany stored 8928 readings in 0.017 s; stations: 12; rows with NULL pm25 (could not be filled): 2
+
+Q1. Average PM2.5 of Adyar in October 2026
+   SQL: SELECT ROUND(AVG(r.pm25), 2) FROM readings r JOIN stations s USING (station_id) WHERE s.name = ? AND r.date BETWEEN '2026-10-01' AND '2026-10-31'
+   -> 43.06
+
+Q2. Stations ranked by their monthly mean PM2.5 (worst first)
+   SQL: SELECT s.name, ROUND(AVG(r.pm25), 1) AS mean_pm25, COUNT(r.pm25) AS valid_readings FROM readings r JOIN stations s USING (station_id) GROUP BY s.name ORDER BY mean_pm25 DESC
+    ('Ennore', 107.3, 744)
+    ('Manali', 99.4, 744)
+    ('Kodungaiyur', 93.9, 744)
+    ('Royapuram', 81.5, 744)
+    ('Tondiarpet', 76.9, 744)
+    ('Alandur', 62.2, 744)
+    ('Guindy', 58.8, 744)
+    ('Perungudi', 55.3, 743)
+    ('T. Nagar', 52.8, 744)
+    ('Anna Nagar', 49.7, 744)
+    ('Velachery', 46.4, 743)
+    ('Adyar', 43.1, 744)
+
+Q3. Which hours of the day have the worst air? (city-wide mean PM2.5 per hour, top 5)
+   SQL: SELECT hour, ROUND(AVG(pm25), 1) AS mean_pm25 FROM readings GROUP BY hour ORDER BY mean_pm25 DESC LIMIT 5
+    (21, 87.8)
+    (22, 85.8)
+    (20, 85.0)
+    (9, 82.5)
+    (8, 80.1)
+
+A1.3 comparison - Q1 from the RAW csv files with a loop (no cleaning, no fill):  87.3 | from the cleaned database: 43.06
+time for Q1: CSV loop over 12 files 9.7 ms | SQL 0.03 ms
+database file size: 532 KB; raw csv size: 394 KB

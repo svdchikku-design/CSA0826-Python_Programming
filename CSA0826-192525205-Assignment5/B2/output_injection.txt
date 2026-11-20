@@ -1,0 +1,18 @@
+A. an honest station name with an apostrophe: St. Mary's Church (true value 70.0)
+   built with +        : OperationalError: near "s": syntax error
+   built with f-string : OperationalError: near "s": syntax error
+   ? placeholder       : 70.0
+
+B. the injection text  Adyar' OR '1'='1   (true average of all five rows would be 78.8; Adyar alone is 54.0)
+   statement the + version really sends :  SELECT AVG(pm25) FROM aq WHERE station = 'Adyar' OR '1'='1'
+   built with +        : 78.8   <- the condition '1'='1' is always true: every row is averaged
+   ? placeholder       : None   <- looks for a station whose NAME is that whole text: none exists
+
+C. a worse input: read another table with UNION
+   statement sent      :  SELECT station FROM aq WHERE station = 'x' UNION SELECT note FROM secret --'
+   a query returning names (SELECT station ... WHERE station = '<input>') leaks: [('board password: s3cr3t',)]
+   same input with ? placeholder: []
+
+D. can execute() run a second statement (DROP TABLE)?
+   sqlite3.execute refuses multiple statements: ProgrammingError - You can only execute one statement at a time. | table aq still exists: True
+   (executescript() would run them - it must never receive user text; other database drivers may allow stacked statements)

@@ -1,0 +1,12 @@
+100,000 calls added to a loop whose useful work takes 17.7 ms in total (best of 3)
+variant                                                    time (ms)   extra vs no debugging
+no debugging                                                    17.7                  0.0 ms
+print to an in-memory buffer                                    43.5                 25.9 ms
+print to a file                                                 45.6                 28.0 ms
+print guarded by a DEBUG flag, flag False                       16.1                 -1.5 ms
+logging.debug, level WARNING (switched off)                     24.4                  6.8 ms
+logging.debug, level DEBUG, formatted, in memory               661.1                643.4 ms
+logging.debug, level DEBUG, to a file                          698.3                680.7 ms
+
+Switching off: print needs every statement deleted or wrapped in an 'if DEBUG' test (easy to forget one); logging needs ONE line:
+   logging.getLogger().setLevel(logging.WARNING)   # or the command-line option --log-level; the debug calls stay in the code

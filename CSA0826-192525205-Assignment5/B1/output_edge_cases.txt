@@ -1,0 +1,5 @@
+min_max(all equal: [50.0, 50.0]) -> ZeroDivisionError: float division by zero
+min_max(one value: [7.0]) -> ZeroDivisionError: float division by zero
+min_max(empty: []) -> ValueError: min() iterable argument is empty
+load_clean('') -> []
+load_clean with junk 'abc' -> ValueError: could not convert string to float: 'abc'  (the given TODO converts with float(); common/cleaning.py handles this with to_number())

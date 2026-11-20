@@ -1,0 +1,13 @@
+Error of the daily mean PM2.5 against the true value (mean absolute error over 31 days, in ug/m3); truth = faultless data, then values blanked
+pattern                            drop (average what is left)  forward fill (max 3 h)  fill with median
+5% scattered single hours                                 0.56                    0.36              0.56
+20% scattered single hours                                1.67                    0.81              1.37
+20% in 6-hour sensor outages                              3.06                    2.55              1.84
+
+Time and extra space for n = 1,000,000 readings with 5% missing (list of values)
+  drop: 0.016 s, O(n), a new list of 949,861 values | forward fill: 0.045 s, O(n), a new list of 1,000,000 | median (sorting): 0.196 s, O(n log n), copy of 949,861 values (sorted() alone 0.180 s)
+
+A2.2 normalisation on one day of Ennore PM2.5 (24 hourly values) with and without one sensor spike
+  normal day                  min   95.0 max  125.5 | min-max of the typical 12:00 value (101.0): 0.197 | z-score: -0.49 | z-score of the extreme value: +1.94
+  same day, one reading 900   min   95.0 max  900.0 | min-max of the typical 12:00 value (101.0): 0.007 | z-score: -0.24 | z-score of the extreme value: +4.79
+  The spike squeezes every other value toward 0 in min-max (range set by two points), so remove impossible values BEFORE scaling.

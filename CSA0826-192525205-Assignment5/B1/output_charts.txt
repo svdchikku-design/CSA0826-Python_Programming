@@ -1,0 +1,4 @@
+chart 1: daily mean from 65.2 (on 2026-10-01) to 73.4 (on 2026-10-31); linear trend +0.26 µg/m³ per day, month mean 69.0
+chart 2: highest median Ennore 104.6, lowest Adyar 42.3; ratio 2.5x; stations with median above 60: Ennore, Manali, Kodungaiyur, Royapuram, Tondiarpet, Alandur
+chart 3: Adyar correlation r = -0.13 (n=744); all stations pooled r = -0.10
+chart 4: worst hours 21:00 (87.8), 22:00 (85.8), 20:00 (85.0); best hour 15:00 (53.1); evening peak / afternoon low = 1.65

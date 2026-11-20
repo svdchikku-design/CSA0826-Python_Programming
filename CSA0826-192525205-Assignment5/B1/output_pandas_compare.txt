@@ -1,0 +1,10 @@
+1. correctness on the whole network (8928 rows): same number of rows: True; differing cells: 0
+
+2. time and peak memory (best of 3 for time; tracemalloc for memory; both start from the same raw text)
+      rows  loops+csv (s)  pandas (s)  speed-up |  loops mem (MB)  pandas mem (MB)
+     1,000          0.008       0.010      0.8x |             0.7              0.3
+   100,000          0.923       0.251      3.7x |            82.7             25.0
+ 1,000,000          9.230       3.518      2.6x |           819.8            250.2
+
+3. vectorised normalisation (pandas) versus loop on the PM2.5 column (1,000,000 values)
+   min-max loop 0.236 s | pandas vectorised 0.0098 s (24x) | same values: True
