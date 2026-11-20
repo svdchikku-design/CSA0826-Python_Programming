@@ -1,8 +1,0 @@
-$ cd v2/a_script && mkdir -p ../out && python attendance_all.py ../../data ../out
-40 records, 8 students, 2 damaged
-$ cd v2/b_module && mkdir -p ../out && python main_b.py ../../data ../out
-40 records, 8 students, 2 damaged
-$ cd v2/c_modules && mkdir -p ../out && python main_c.py ../../data ../out
-40 records, 8 students, 2 damaged
-$ cd v2/d_package && mkdir -p ../out && python main_d.py ../../data ../out
-40 records, 8 students, 2 damaged
