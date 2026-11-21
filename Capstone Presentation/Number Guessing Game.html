@@ -1,0 +1,526 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Number Guessing Game</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: game card and live trace on the left, three module cards on the right that light up as the game runs.
+   One committed look: a saturated, moving colour field behind dark glass panels. Module colours match the PPT. */
+:root {
+  --base: #1d1458;
+  --ink: #ffffff;
+  --muted: #cbc8f0;
+  --panel: rgba(18, 12, 56, 0.86);
+  --panel-2: rgba(255, 255, 255, 0.07);
+  --line: rgba(255, 255, 255, 0.16);
+  --m1: #2ee6c8;
+  --m2: #ffb938;
+  --m3: #ff6a86;
+  --violet: #a597ff;
+  --good: #52e394;
+  --bad: #ff8585;
+  --dark: #190f45;
+  --display: "Bricolage Grotesque", system-ui, sans-serif;
+  --body: "DM Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--base); }
+body { margin: 0; color: var(--ink); font: 400 16px/1.5 var(--body); min-height: 100%; }
+
+.bg { position: fixed; inset: 0; overflow: hidden; z-index: 0; background: var(--base); }
+.bg::before {
+  content: ""; position: absolute; inset: -25%;
+  background:
+    radial-gradient(34% 34% at 14% 18%, #00c9ad 0, transparent 70%),
+    radial-gradient(32% 32% at 86% 14%, #ff4f86 0, transparent 70%),
+    radial-gradient(36% 36% at 88% 86%, #ffb020 0, transparent 70%),
+    radial-gradient(34% 34% at 16% 88%, #6a4cff 0, transparent 70%),
+    radial-gradient(28% 28% at 50% 50%, #c13cff 0, transparent 70%);
+  animation: drift 26s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  50% { transform: translate(4%, -3%) rotate(14deg) scale(1.08); }
+  100% { transform: translate(-4%, 4%) rotate(-10deg) scale(1.02); }
+}
+
+.wrap {
+  position: relative; z-index: 1; max-width: 1180px; margin: 0 auto;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 28px 44px;
+}
+header { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 18px 28px; margin-bottom: 22px; }
+.title { min-width: 0; }
+h1 { font: 800 clamp(34px, 6vw, 58px)/1 var(--display); margin: 0 0 8px; letter-spacing: -0.02em; text-wrap: balance; text-shadow: 0 2px 18px rgba(20, 10, 60, 0.45); }
+.sub { margin: 0; color: #fff; font-size: 17px; max-width: 46ch; text-shadow: 0 1px 12px rgba(20, 10, 60, 0.6); }
+
+.stepper { display: flex; flex-wrap: wrap; gap: 8px; }
+.step { display: flex; align-items: center; gap: 8px; padding: 7px 14px 7px 8px; border-radius: 999px; background: var(--panel); border: 1px solid var(--line); font-weight: 700; font-size: 14px; color: var(--muted); transition: background .25s, color .25s, border-color .25s; }
+.step b { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--panel-2); font-family: var(--display); font-size: 13px; color: var(--ink); }
+.step.on { color: var(--dark); background: var(--c); border-color: var(--c); }
+.step.on b { background: var(--dark); color: var(--c); }
+.m1 { --c: var(--m1); } .m2 { --c: var(--m2); } .m3 { --c: var(--m3); }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); grid-template-areas: "game mods" "log mods"; grid-template-rows: auto 1fr; gap: 18px; align-items: start; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 22px; padding: 22px; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 18px 50px rgba(15, 8, 60, 0.4); }
+.game { grid-area: game; min-width: 0; }
+.mods { grid-area: mods; display: grid; gap: 14px; min-width: 0; }
+.log { grid-area: log; min-width: 0; }
+h2 { font: 800 22px/1.15 var(--display); margin: 0; }
+.kicker { font: 600 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+
+/* level picker */
+.levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-top: 16px; }
+.level { appearance: none; cursor: pointer; text-align: left; font: inherit; color: var(--ink); background: var(--panel-2); border: 2px solid var(--line); border-radius: 18px; padding: 16px; display: grid; gap: 4px; transition: transform .15s, border-color .15s, background .15s; }
+.level:hover { transform: translateY(-3px); border-color: var(--m1); background: rgba(46, 230, 200, 0.12); }
+.level strong { font: 800 22px/1 var(--display); }
+.level span { color: var(--muted); font-size: 14px; }
+.level em { font-style: normal; font: 600 13px var(--mono); color: var(--m1); }
+:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+.peek { display: flex; align-items: center; gap: 10px; margin-top: 18px; color: var(--muted); font-size: 14px; cursor: pointer; width: fit-content; }
+.peek input { width: 18px; height: 18px; accent-color: var(--m1); }
+
+/* guessing */
+.status-line { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; margin-bottom: 16px; }
+.status-line h2 span { color: var(--m2); }
+.pips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.pip { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--m2); transition: background .2s, transform .2s; }
+.pip.used { background: var(--m2); transform: scale(1.08); }
+.pips small { margin-left: 8px; color: var(--muted); font: 600 13px var(--mono); }
+
+.track-wrap { margin: 6px 0 6px; }
+.track { position: relative; height: 26px; border-radius: 13px; background: var(--panel-2); border: 1px solid var(--line); overflow: hidden; }
+.possible { position: absolute; top: 0; bottom: 0; background: linear-gradient(90deg, var(--m1), var(--m2)); opacity: .9; border-radius: 13px; transition: left .45s cubic-bezier(.3,.8,.3,1), width .45s cubic-bezier(.3,.8,.3,1); }
+.tick { position: absolute; top: 0; bottom: 0; width: 3px; margin-left: -1px; background: var(--dark); }
+.track-ends { display: flex; justify-content: space-between; margin-top: 6px; font: 600 12px var(--mono); color: var(--muted); }
+.range-note { margin: 10px 0 0; font-size: 15px; }
+.range-note b { color: var(--m1); font-variant-numeric: tabular-nums; }
+
+form.guess { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin-top: 18px; }
+input[type=text] { width: 100%; min-width: 0; font: 600 30px/1 var(--mono); color: var(--ink); background: rgba(255,255,255,.1); border: 2px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+input[type=text]::placeholder { color: rgba(255,255,255,.45); }
+input[type=text]:focus { outline: none; border-color: var(--m2); box-shadow: 0 0 0 4px rgba(255, 185, 56, .25); }
+.btn { appearance: none; cursor: pointer; border: 0; border-radius: 16px; font: 800 17px var(--display); padding: 0 24px; min-height: 52px; color: var(--dark); background: var(--c, var(--m2)); transition: transform .12s, filter .12s; }
+.btn:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.btn:active { transform: translateY(0); }
+.btn.ghost { background: var(--panel-2); color: var(--ink); border: 2px solid var(--line); }
+.hint { min-height: 66px; margin-top: 16px; padding: 14px 16px; border-radius: 16px; background: var(--panel-2); display: flex; gap: 12px; align-items: center; font: 700 20px/1.25 var(--display); }
+.hint i { font-style: normal; display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--m2); color: var(--dark); font-size: 16px; }
+.hint.low i { background: var(--m1); } .hint.high i { background: var(--m3); } .hint.warn i { background: var(--bad); }
+.hint.shake { animation: shake .35s; }
+@keyframes shake { 20% { transform: translateX(-7px); } 50% { transform: translateX(6px); } 80% { transform: translateX(-3px); } }
+
+/* result */
+.result { text-align: left; }
+.result h2 { font-size: clamp(30px, 5vw, 44px); margin: 4px 0 8px; }
+.result.win h2 { color: var(--good); } .result.lose h2 { color: var(--bad); }
+.formula { margin: 14px 0 18px; padding: 16px; border-radius: 16px; background: var(--panel-2); font: 600 18px/1.4 var(--mono); overflow-wrap: anywhere; }
+.formula b { color: var(--m3); font-size: 28px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* module cards */
+.mod { padding: 18px 20px; border-radius: 20px; opacity: .8; transition: opacity .3s, box-shadow .3s, transform .3s; }
+.mod.active { opacity: 1; box-shadow: 0 0 0 2px var(--c), 0 0 38px color-mix(in srgb, var(--c) 45%, transparent), 0 18px 50px rgba(15, 8, 60, 0.4); }
+.mod-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.badge { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--c); color: var(--dark); font: 800 16px var(--display); flex: none; }
+.mod-head h2 { flex: 1; min-width: 0; font-size: 20px; }
+.chip { font: 600 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; background: var(--panel-2); color: var(--muted); white-space: nowrap; }
+.mod.active .chip { background: var(--c); color: var(--dark); }
+.mod.done .chip { background: rgba(82, 227, 148, .18); color: var(--good); }
+dl { margin: 0; display: grid; gap: 6px; }
+dl div { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+dt { color: var(--muted); font-size: 14px; }
+dd { margin: 0; font: 600 14px var(--mono); text-align: right; min-width: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+dd.flash { animation: flash .8s; }
+@keyframes flash { 0% { color: var(--c); text-shadow: 0 0 14px var(--c); } 100% { color: var(--ink); text-shadow: none; } }
+.now { margin-top: 12px; padding: 12px 14px; border-radius: 14px; background: rgba(0, 0, 0, .28); }
+.now code { display: block; font: 600 13px/1.45 var(--mono); color: var(--c); overflow-wrap: anywhere; }
+.now p { margin: 6px 0 0; font-size: 14px; color: #fff; }
+
+/* trace log */
+.log h2 { margin-bottom: 12px; }
+.log ol { list-style: none; margin: 0; padding: 0; height: 250px; overflow-y: auto; display: grid; align-content: start; gap: 6px; scrollbar-color: var(--violet) transparent; }
+.log li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: baseline; padding: 8px 10px; border-radius: 12px; background: rgba(0, 0, 0, .26); animation: in .3s; }
+@keyframes in { from { opacity: 0; transform: translateY(6px); } }
+.tag { font: 800 12px var(--mono); padding: 2px 7px; border-radius: 7px; background: var(--c); color: var(--dark); }
+.log code { font: 600 13px var(--mono); color: var(--c); overflow-wrap: anywhere; }
+.log .out { grid-column: 2; font-size: 14px; color: var(--muted); }
+
+canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
+.foot { margin: 22px 0 0; color: #fff; font-size: 14px; text-shadow: 0 1px 10px rgba(20, 10, 60, .7); }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "game" "mods" "log"; }
+  .card { padding: 18px; }
+  input[type=text] { font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bg::before, .hint.shake, .log li, dd.flash { animation: none; }
+  .possible, .pip, .level, .btn, .mod { transition: none; }
+}
+</style>
+
+<div class="bg" aria-hidden="true"></div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <header>
+    <div class="title">
+      <h1>Number Guessing Game</h1>
+      <p class="sub">Play a round. The three modules on the right light up as each part of the program runs.</p>
+    </div>
+    <div class="stepper" aria-label="Current module">
+      <div class="step m1 on" id="step1"><b>1</b>Game Setup</div>
+      <div class="step m2" id="step2"><b>2</b>Guess Loop</div>
+      <div class="step m3" id="step3"><b>3</b>Score &amp; Replay</div>
+    </div>
+  </header>
+
+  <div class="grid">
+    <section class="card game" id="game" aria-live="polite">
+      <!-- SETUP -->
+      <div id="viewSetup">
+        <p class="kicker">Module 1 is waiting</p>
+        <h2>Pick a level to start</h2>
+        <div class="levels">
+          <button class="level" data-key="1" type="button"><strong>Easy</strong><span>1 to 50</span><em>10 attempts</em></button>
+          <button class="level" data-key="2" type="button"><strong>Medium</strong><span>1 to 100</span><em>7 attempts</em></button>
+          <button class="level" data-key="3" type="button"><strong>Hard</strong><span>1 to 200</span><em>5 attempts</em></button>
+        </div>
+        <label class="peek" for="peek"><input type="checkbox" id="peek"> Show the secret number (for the demo)</label>
+      </div>
+
+      <!-- GUESS -->
+      <div id="viewGuess" hidden>
+        <div class="status-line">
+          <h2 id="levelTitle">Medium: <span>1 to 100</span></h2>
+          <div class="pips" id="pips"></div>
+        </div>
+        <div class="track-wrap">
+          <div class="track" id="track" role="img" aria-label="Range where the secret number can still be"><div class="possible" id="possible"></div></div>
+          <div class="track-ends"><span id="endLow">1</span><span id="endHigh">100</span></div>
+        </div>
+        <p class="range-note" id="rangeNote"></p>
+        <form class="guess" id="guessForm" autocomplete="off">
+          <input type="text" id="guessInput" inputmode="numeric" placeholder="Your guess" aria-label="Your guess">
+          <button class="btn" type="submit">Guess</button>
+        </form>
+        <div class="hint" id="hint"><i>?</i><span id="hintText">Type a number and press Enter.</span></div>
+      </div>
+
+      <!-- RESULT -->
+      <div id="viewResult" class="result" hidden>
+        <p class="kicker">Module 3 is running</p>
+        <h2 id="resultTitle"></h2>
+        <div class="formula" id="formula"></div>
+        <div class="actions">
+          <button class="btn" id="again" type="button" style="--c: var(--m3)">Play again (y)</button>
+          <button class="btn ghost" id="quit" type="button">Quit (n)</button>
+        </div>
+      </div>
+
+      <!-- END -->
+      <div id="viewEnd" class="result" hidden>
+        <p class="kicker">Program finished</p>
+        <h2>Thanks for playing!</h2>
+        <div class="formula" id="endBest"></div>
+        <div class="actions"><button class="btn" id="restart" type="button" style="--c: var(--m1)">Run the game again</button></div>
+      </div>
+    </section>
+
+    <aside class="mods" aria-label="The three modules">
+      <article class="card mod m1 active" id="mod1">
+        <div class="mod-head"><span class="badge">1</span><h2>Game Setup</h2><span class="chip" id="chip1">Running</span></div>
+        <dl>
+          <div><dt>Level</dt><dd id="r1level">waiting</dd></div>
+          <div><dt>Range</dt><dd id="r1range">-</dd></div>
+          <div><dt>Attempts allowed</dt><dd id="r1limit">-</dd></div>
+          <div><dt>Secret number</dt><dd id="r1secret">-</dd></div>
+        </dl>
+        <div class="now"><code id="now1">choice = input("Choose level (1/2/3): ")</code><p id="say1">Waiting for you to pick a level.</p></div>
+      </article>
+
+      <article class="card mod m2" id="mod2">
+        <div class="mod-head"><span class="badge">2</span><h2>Guess Loop</h2><span class="chip" id="chip2">Waiting</span></div>
+        <dl>
+          <div><dt>Last guess</dt><dd id="r2guess">-</dd></div>
+          <div><dt>Input check</dt><dd id="r2check">-</dd></div>
+          <div><dt>Comparison</dt><dd id="r2cmp">-</dd></div>
+          <div><dt>Attempts used</dt><dd id="r2used">0</dd></div>
+        </dl>
+        <div class="now"><code id="now2">while used &lt; limit:</code><p id="say2">Starts after a level is chosen.</p></div>
+      </article>
+
+      <article class="card mod m3" id="mod3">
+        <div class="mod-head"><span class="badge">3</span><h2>Score &amp; Replay</h2><span class="chip" id="chip3">Waiting</span></div>
+        <dl>
+          <div><dt>Round result</dt><dd id="r3res">-</dd></div>
+          <div><dt>Score</dt><dd id="r3score">-</dd></div>
+          <div><dt>Best score so far</dt><dd id="r3best">0</dd></div>
+          <div><dt>Play again?</dt><dd id="r3again">-</dd></div>
+        </dl>
+        <div class="now"><code id="now3">best = max(best, score)</code><p id="say3">Starts when the round ends.</p></div>
+      </article>
+    </aside>
+
+    <section class="card log">
+      <h2>Live trace</h2>
+      <ol id="logList" aria-label="Program trace"></ol>
+    </section>
+  </div>
+  <p class="foot">This page follows the same logic as the Python program: LEVELS, random.randint, get_guess, play_round, calculate_score and main.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var LEVELS = { "1": ["Easy", 1, 50, 10], "2": ["Medium", 1, 100, 7], "3": ["Hard", 1, 200, 5] };
+  var $ = function (id) { return document.getElementById(id); };
+  var S = { phase: "setup", name: "", low: 1, high: 100, limit: 7, secret: 0, used: 0, guesses: [], best: 0, peek: false, rounds: 0 };
+
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- helpers ---------- */
+  function setRow(id, text, flash) {
+    var el = $(id); el.textContent = text;
+    if (flash && !reduce) { el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash"); }
+  }
+  function now(n, code, say) { $("now" + n).textContent = code; $("say" + n).textContent = say; }
+  function log(n, code, out) {
+    var li = document.createElement("li"); li.className = "m" + n;
+    var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "M" + n;
+    var c = document.createElement("code"); c.textContent = code;
+    li.appendChild(tag); li.appendChild(c);
+    if (out) { var o = document.createElement("span"); o.className = "out"; o.textContent = out; li.appendChild(o); }
+    var list = $("logList"); list.appendChild(li);
+    while (list.children.length > 80) list.removeChild(list.firstChild);
+    list.scrollTop = list.scrollHeight;
+  }
+  function stage(active, states) {
+    [1, 2, 3].forEach(function (n) {
+      var card = $("mod" + n), st = states[n - 1];
+      card.classList.toggle("active", n === active);
+      card.classList.toggle("done", st === "Done");
+      $("chip" + n).textContent = st;
+      $("step" + n).classList.toggle("on", n === active);
+    });
+  }
+  function show(view) {
+    ["viewSetup", "viewGuess", "viewResult", "viewEnd"].forEach(function (v) { $(v).hidden = v !== view; });
+  }
+  function rand(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
+
+  /* ---------- MODULE 1: setup ---------- */
+  function resetSetupView() {
+    S.phase = "setup"; show("viewSetup");
+    stage(1, ["Running", "Waiting", "Waiting"]);
+    setRow("r1level", "waiting"); setRow("r1range", "-"); setRow("r1limit", "-"); setRow("r1secret", "-");
+    now(1, 'choice = input("Choose level (1/2/3): ")', "Waiting for you to pick a level.");
+    setRow("r2guess", "-"); setRow("r2check", "-"); setRow("r2cmp", "-"); setRow("r2used", "0");
+    now(2, "while used < limit:", "Starts after a level is chosen.");
+    setRow("r3res", "-"); setRow("r3score", "-"); setRow("r3again", "-");
+    now(3, "best = max(best, score)", "Starts when the round ends.");
+  }
+  function startGame(key) {
+    var lv = LEVELS[key];
+    S.name = lv[0]; S.low = lv[1]; S.high = lv[2]; S.limit = lv[3];
+    S.used = 0; S.guesses = []; S.rounds++;
+    log(1, 'choice = input("Choose level (1/2/3): ")', 'You typed "' + key + '".');
+    log(1, "while choice not in LEVELS:", '"' + key + '" is a key, so the loop is skipped.');
+    log(1, 'name, low, high, limit = LEVELS["' + key + '"]', '("' + lv[0] + '", ' + lv[1] + ", " + lv[2] + ", " + lv[3] + ")");
+    S.secret = rand(S.low, S.high);
+    S.peek = $("peek").checked;
+    log(1, "secret = random.randint(" + S.low + ", " + S.high + ")", S.peek ? "Secret picked: " + S.secret : "Secret picked and hidden.");
+    log(1, "return secret, low, high, limit", "Four values go to Module 2.");
+    setRow("r1level", S.name, true); setRow("r1range", S.low + " to " + S.high, true); setRow("r1limit", String(S.limit), true);
+    setRow("r1secret", S.peek ? String(S.secret) : "??", true);
+    now(1, "return secret, low, high, limit", "Setup finished. The settings are handed to Module 2.");
+    beginGuessing();
+  }
+
+  /* ---------- MODULE 2: guess loop ---------- */
+  function beginGuessing() {
+    S.phase = "guess"; show("viewGuess");
+    stage(2, ["Done", "Running", "Waiting"]);
+    $("levelTitle").innerHTML = "";
+    $("levelTitle").appendChild(document.createTextNode(S.name + ": "));
+    var sp = document.createElement("span"); sp.textContent = S.low + " to " + S.high; $("levelTitle").appendChild(sp);
+    $("endLow").textContent = S.low; $("endHigh").textContent = S.high;
+    $("guessInput").value = "";
+    setHint("", "?", "Type a number and press Enter.");
+    renderPips(); renderRange();
+    now(2, "while used < limit:", "Attempts left: " + (S.limit - S.used) + ". Waiting for your guess.");
+    log(2, "play_round(secret, " + S.low + ", " + S.high + ", " + S.limit + ")", "used = 0. The loop starts.");
+    $("guessInput").focus();
+  }
+  function setHint(cls, icon, text) {
+    var h = $("hint"); h.className = "hint " + cls;
+    h.querySelector("i").textContent = icon; $("hintText").textContent = text;
+    if (cls === "warn" && !reduce) { void h.offsetWidth; h.classList.add("shake"); }
+  }
+  function renderPips() {
+    var p = $("pips"); p.innerHTML = "";
+    for (var i = 0; i < S.limit; i++) { var d = document.createElement("span"); d.className = "pip" + (i < S.used ? " used" : ""); p.appendChild(d); }
+    var s = document.createElement("small"); s.textContent = (S.limit - S.used) + " left"; p.appendChild(s);
+  }
+  function knownRange() {
+    var lo = S.low, hi = S.high;
+    S.guesses.forEach(function (g) { if (g < S.secret) lo = Math.max(lo, g + 1); else if (g > S.secret) hi = Math.min(hi, g - 1); });
+    return [lo, hi];
+  }
+  function renderRange() {
+    var r = knownRange(), span = Math.max(1, S.high - S.low);
+    var left = (r[0] - S.low) / span * 100, width = Math.max(2.5, (r[1] - r[0]) / span * 100);
+    var pos = $("possible"); pos.style.left = Math.min(left, 100 - width) + "%"; pos.style.width = width + "%";
+    var track = $("track");
+    Array.prototype.slice.call(track.querySelectorAll(".tick")).forEach(function (t) { track.removeChild(t); });
+    S.guesses.forEach(function (g) {
+      var t = document.createElement("span"); t.className = "tick"; t.style.left = ((g - S.low) / span * 100) + "%"; track.appendChild(t);
+    });
+    var count = r[1] - r[0] + 1;
+    $("rangeNote").innerHTML = "";
+    if (!S.guesses.length) { $("rangeNote").textContent = "The secret could be any of " + (S.high - S.low + 1) + " numbers."; }
+    else {
+      $("rangeNote").appendChild(document.createTextNode("The secret is between "));
+      var b1 = document.createElement("b"); b1.textContent = r[0]; $("rangeNote").appendChild(b1);
+      $("rangeNote").appendChild(document.createTextNode(" and "));
+      var b2 = document.createElement("b"); b2.textContent = r[1]; $("rangeNote").appendChild(b2);
+      $("rangeNote").appendChild(document.createTextNode(" (" + count + (count === 1 ? " number" : " numbers") + " left)."));
+    }
+  }
+  function submitGuess(e) {
+    e.preventDefault();
+    if (S.phase !== "guess") return;
+    var raw = $("guessInput").value.trim();
+    var q = 'guess = int(input("Your guess: "))';
+    if (!/^[+-]?\d+$/.test(raw)) {
+      log(2, q, 'You typed "' + raw + '". int() raises ValueError, so except runs: "Enter a whole number."');
+      setRow("r2guess", raw === "" ? "(empty)" : raw, true); setRow("r2check", "rejected", true); setRow("r2cmp", "skipped");
+      now(2, "except ValueError:", "Not a whole number. No attempt is used. Asking again.");
+      setHint("warn", "!", "Enter a whole number.");
+      $("guessInput").select(); return;
+    }
+    var n = parseInt(raw, 10);
+    if (n < S.low || n > S.high) {
+      log(2, "if low <= guess <= high:", n + " is outside " + S.low + " to " + S.high + '. Prints "Enter ' + S.low + " to " + S.high + ' only."');
+      setRow("r2guess", String(n), true); setRow("r2check", "out of range", true); setRow("r2cmp", "skipped");
+      now(2, "if low <= guess <= high:", "Outside the range. No attempt is used. Asking again.");
+      setHint("warn", "!", "Enter " + S.low + " to " + S.high + " only.");
+      $("guessInput").select(); return;
+    }
+    S.used++; S.guesses.push(n);
+    log(2, q, n + " is valid. get_guess returns " + n + ".");
+    log(2, "used += 1", "used = " + S.used + " of " + S.limit);
+    setRow("r2guess", String(n), true); setRow("r2check", "valid", true); setRow("r2used", S.used + " of " + S.limit, true);
+    renderPips(); renderRange(); $("guessInput").value = "";
+    if (n === S.secret) {
+      log(2, "if guess == secret:", "Equal. return True, " + S.used);
+      setRow("r2cmp", "guess == secret", true);
+      now(2, "return True, used", "Correct! The loop ends and Module 2 returns (True, " + S.used + ").");
+      setHint("", "✓", "Correct!");
+      return endRound(true);
+    }
+    var low = n < S.secret;
+    log(2, low ? "if guess < secret:" : "else:", low ? 'Too low. Prints "Too low! Go higher."' : 'Too high. Prints "Too high! Go lower."');
+    setRow("r2cmp", low ? "guess < secret" : "guess > secret", true);
+    now(2, low ? "if guess < secret:" : "else:", (low ? "Too low. " : "Too high. ") + "Attempts left: " + (S.limit - S.used) + ".");
+    setHint(low ? "low" : "high", low ? "▲" : "▼", low ? "Too low! Go higher." : "Too high! Go lower.");
+    if (S.used >= S.limit) {
+      log(2, "return False, used", "Out of attempts. Returns (False, " + S.used + ").");
+      now(2, "return False, used", "Out of attempts. Module 2 returns (False, " + S.used + ").");
+      return endRound(false);
+    }
+    $("guessInput").focus();
+  }
+
+  /* ---------- MODULE 3: score and replay ---------- */
+  function endRound(won) {
+    S.phase = "wait";
+    setTimeout(function () {
+      S.phase = "result"; show("viewResult");
+      stage(3, ["Done", "Done", "Running"]);
+      var score = won ? (S.limit - S.used + 1) * 10 : 0;
+      var formula = $("formula"); formula.innerHTML = "";
+      $("viewResult").className = "result " + (won ? "win" : "lose");
+      if (won) {
+        $("resultTitle").textContent = "Correct! It was " + S.secret + ".";
+        log(3, "score = calculate_score(" + S.used + ", " + S.limit + ")", "(" + S.limit + " - " + S.used + " + 1) x 10 = " + score);
+        log(3, 'print(f"Correct! Score: {score}")', "Score: " + score);
+        formula.appendChild(document.createTextNode("(" + S.limit + " - " + S.used + " + 1) x 10 = "));
+        var b = document.createElement("b"); b.textContent = score; formula.appendChild(b);
+        now(3, "calculate_score(used, limit)", "Fewer guesses give a higher score. You used " + S.used + ".");
+        burst();
+      } else {
+        $("resultTitle").textContent = "Game over! It was " + S.secret + ".";
+        log(3, 'print(f"Game over! It was {secret}.")', "return 0. Score: 0");
+        formula.textContent = "Out of attempts. Score: 0";
+        now(3, "return 0", "No win, so the score is 0. The secret is revealed.");
+      }
+      var prev = S.best; S.best = Math.max(S.best, score);
+      log(3, "best = max(best, score)", "max(" + prev + ", " + score + ") = " + S.best);
+      setRow("r3res", won ? "won in " + S.used : "lost", true); setRow("r3score", String(score), true);
+      setRow("r3best", String(S.best), true); setRow("r3again", "(y/n) waiting", true);
+      setRow("r1secret", String(S.secret), true);
+      log(3, 'again = input("Play again? (y/n): ")', "Waiting for y or n.");
+      $("again").focus();
+    }, won ? 650 : 900);
+  }
+  function playAgain() {
+    log(3, 'again = "y"', "Back to Module 1 for a new round.");
+    setRow("r3again", "y"); resetSetupView();
+  }
+  function quit() {
+    S.phase = "end"; show("viewEnd");
+    log(3, 'again = "n"', 'print("Thanks for playing!") then break.');
+    setRow("r3again", "n", true);
+    stage(0, ["Done", "Done", "Done"]);
+    now(3, "break", "The while True loop in main() ends. The program exits.");
+    $("endBest").innerHTML = "";
+    $("endBest").appendChild(document.createTextNode("Best score: "));
+    var b = document.createElement("b"); b.textContent = S.best; $("endBest").appendChild(b);
+    $("restart").focus();
+  }
+  function restart() {
+    log(1, "python number_guessing_game.py", "New run. Best score stays at " + S.best + " until you close the page.");
+    resetSetupView();
+  }
+
+  /* ---------- confetti ---------- */
+  function burst() {
+    if (reduce) return;
+    var cv = $("confetti"), cx = cv.getContext("2d");
+    cv.width = innerWidth; cv.height = innerHeight;
+    var cols = ["#2ee6c8", "#ffb938", "#ff6a86", "#a597ff", "#ffffff"], ps = [];
+    for (var i = 0; i < 110; i++) ps.push({ x: innerWidth / 2, y: innerHeight * 0.4, vx: (Math.random() - 0.5) * 14, vy: -Math.random() * 13 - 3, s: 5 + Math.random() * 6, c: cols[i % cols.length], r: Math.random() * 6 });
+    var t0 = performance.now();
+    (function frame(t) {
+      var k = t - t0; cx.clearRect(0, 0, cv.width, cv.height);
+      ps.forEach(function (p) { p.vy += 0.35; p.x += p.vx; p.y += p.vy; p.r += 0.2; cx.fillStyle = p.c; cx.save(); cx.translate(p.x, p.y); cx.rotate(p.r); cx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * 0.6); cx.restore(); });
+      if (k < 2400) requestAnimationFrame(frame); else cx.clearRect(0, 0, cv.width, cv.height);
+    })(t0);
+  }
+
+  /* ---------- wiring ---------- */
+  Array.prototype.slice.call(document.querySelectorAll(".level")).forEach(function (b) {
+    b.addEventListener("click", function () { startGame(b.getAttribute("data-key")); });
+  });
+  $("guessForm").addEventListener("submit", submitGuess);
+  $("again").addEventListener("click", playAgain);
+  $("quit").addEventListener("click", quit);
+  $("restart").addEventListener("click", restart);
+  document.addEventListener("keydown", function (e) {
+    if (S.phase !== "result" || e.ctrlKey || e.metaKey || e.altKey) return;
+    var k = e.key.toLowerCase();
+    if (k === "y") playAgain(); else if (k === "n") quit();
+  });
+
+  log(1, "python number_guessing_game.py", "Program started. main() calls setup_game().");
+  log(1, 'print("=== NUMBER GUESSING GAME ===")', "The level menu is shown.");
+})();
+</script>
+
+</body></html>
